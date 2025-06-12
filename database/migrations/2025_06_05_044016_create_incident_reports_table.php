@@ -34,7 +34,9 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->timestamp('incident_created_at')->nullable();
             $table->timestamp('incident_updated_at')->nullable();
-            $table->timestamps();
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
+            // $table->timestamps();
         });
     }
 
