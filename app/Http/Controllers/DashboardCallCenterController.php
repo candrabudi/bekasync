@@ -404,43 +404,24 @@ class DashboardCallCenterController extends Controller
 
     public function getTotalTypeReport(Request $request)
     {
-        try {
-            // Step 1: Login untuk mendapatkan token
-            $loginResponse = Http::withHeaders([
-                'accept' => 'application/json',
-            ])->post('https://kotabekasiv2.sakti112.id/api/services/login', [
-                'username' => 'apikotabekasi@sakti112.id',
-                'password' => '_cH_h8_cLnGYBQH'
-            ]);
+        $start = $request->start_date;
+        $end = $request->end_date;
+        $response = Http::get('https://kotabekasiv2.sakti112.id/master/wallboard/get-summary-insiden', [
+            'date' => [Carbon::parse($start)->format('d/m/Y'), Carbon::parse($end)->format('d/m/Y')]
+        ]);
 
-            if (!$loginResponse->successful()) {
-                return response()->json(['error' => 'Login gagal'], 500);
-            }
-
-            $token = $loginResponse->json('content.access_token');
-
-            // Step 2: Ambil tanggal dari request, default ke hari ini
-            $startDate = $request->input('start_date', Carbon::now()->format('Y-m-d'));
-            $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
-
-            // Step 3: Kirim request ke endpoint total-tipe-laporan
-            $dataResponse = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token,
-            ])->post('https://kotabekasiv2.sakti112.id/api/v2/wallboard/112/ticket/total-tipe-laporan', [
-                'date' => [$startDate, $endDate]
-            ]);
-
-            if (!$dataResponse->successful()) {
-                return response()->json(['error' => 'Gagal mengambil data total type report'], 500);
-            }
-
-            return response()->json($dataResponse->json());
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
-        }
+        return response()->json($response->json());
     }
 
+    public function wallBoardGetSummaryCall(Request $request)
+    {
+        $start = $request->start_date;
+        $end = $request->end_date;
+        $response = Http::get('https://kotabekasiv2.sakti112.id/master/wallboard/get-summary-call', [
+            'date' => [Carbon::parse($start)->format('d/m/Y'), Carbon::parse($end)->format('d/m/Y')]
+        ]);
+
+        return response()->json($response->json());
+    }
 
 }

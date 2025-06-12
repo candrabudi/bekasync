@@ -31,6 +31,7 @@ Route::prefix('dashboard/call-center')->name('dashboard.call_center.')->group(fu
     Route::get('/hourly-stats', [DashboardCallCenterController::class, 'hourlyStats'])->name('cdr_hourly_stats');
     Route::get('/speedmeter-data', [DashboardCallCenterController::class, 'getSpeedmeterData'])->name('get_speedmeter_data');
     Route::get('/total-type-report', [DashboardCallCenterController::class, 'getTotalTypeReport'])->name('get_total_type_report');
+    Route::get('/summary-call', [DashboardCallCenterController::class, 'wallBoardGetSummaryCall'])->name('wallboard_get_summary_call');
 
 });
 

@@ -24,10 +24,302 @@
             }
         }
     </style>
+    <style>
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 400px;
+            max-width: 700px;
+            margin: 2em auto;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ebebeb;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-description {
+            margin: 0.3rem 10px;
+        }
+
+
+        .summary-card {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            width: 100%;
+            /* max-width: 1000px; */
+            /* margin: 0 auto; */
+        }
+
+        .summary-card-body {
+            padding: 20px;
+            color: white;
+            display: flex;
+            /* gap: 20px; */
+            align-items: center;
+        }
+
+        .summary-data-section {
+            /* flex: 1; */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .summary-data-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-data-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-data-text {
+            flex: 1;
+        }
+
+        .summary-data-label {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .summary-data-value {
+            font-size: clamp(1.5rem, 2vw, 1.75rem);
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .summary-speedometer-section {
+            /* flex: 0 0 400px; */
+            width: 100%;
+            marign-left: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #summary-speedometer-chart {
+            max-height: 450px;
+            max-width: 400px;
+        }
+
+        @media (max-width: 991.98px) {
+            .summary-card {
+                max-width: 800px;
+            }
+
+            .summary-card-body {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .summary-data-section {
+                width: 100%;
+                padding: 10px;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 10px;
+                justify-content: space-between;
+            }
+
+            .summary-data-item {
+                flex: 1;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                min-width: 100px;
+            }
+
+            .summary-data-text {
+                flex: none;
+            }
+
+            .summary-data-label {
+                font-size: 1rem;
+            }
+
+            .summary-data-value {
+                font-size: 1.5rem;
+            }
+
+            .summary-speedometer-section {
+                flex: 0 0 auto;
+                width: 100%;
+                padding-right: 0;
+            }
+
+            #summary-speedometer-chart {
+                max-height: 300px;
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .summary-card {
+                max-width: 100%;
+            }
+
+            .summary-data-section {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .summary-data-item {
+                min-width: 45%;
+            }
+
+            .summary-data-label {
+                font-size: 0.9rem;
+            }
+
+            .summary-data-value {
+                font-size: 1.2rem;
+            }
+
+            .summary-data-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+
+            #summary-speedometer-chart {
+                max-height: 250px;
+                max-width: 300px;
+            }
+        }
+
+
+
+
+        .incident-summary-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 10px;
+            width: 100%;
+            /* max-width: 1400px; */
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .incident-summary-card h3 {
+            font-weight: 700;
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            margin-bottom: 15px;
+            color: #1e40af;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .incident-summary-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .incident-item {
+            flex: 1;
+            background: #f9fafb;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            padding: 10px;
+            min-width: 120px;
+        }
+
+        .incident-item-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .incident-item i {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .incident-item h3 {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 700;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .incident-item p {
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: #6b7280;
+            margin: 0;
+        }
+
+        @media (max-width: 1200px) {
+            .incident-summary-card {
+                max-width: 100%;
+            }
+
+            .incident-summary-grid {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .incident-item {
+                min-width: 48%;
+            }
+
+            .incident-item h3 {
+                font-size: 1.2rem;
+            }
+
+            .incident-item p {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .incident-item {
+                min-width: 100%;
+            }
+
+            .incident-item h3 {
+                font-size: 1.1rem;
+            }
+
+            .incident-item p {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
     @include('dashboards.call-center.partials.styles.main')
 @endpush
 @section('content')
     <div class="container">
+
         <div class="row align-items-center justify-content-between mb-3">
             <div class="col-xl-4 col-md-6">
                 <div class="page-title-content">
@@ -54,67 +346,136 @@
             </div>
         </div>
 
-        <div class="row align-items-stretch mb-5">
-            <!-- Kolom Kiri -->
+
+
+        <div class="row mb-5">
+            <!-- Card SLA -->
             <div class="col-md-6">
-                <div class="card shadow-sm p-4 h-100">
-                    <div id="speedometer-container">
-                        <!-- Skeleton loader sementara -->
-                        <div class="mb-4">
-                            <div id="gaugeChart" class="w-100" style="height: 320px; border-radius: 8px;"></div>
+                <div class="summary-card text-white">
+                    <div class="summary-card-body">
+                        <!-- Data Section (Left on Desktop, Top on Mobile) -->
+                        <div class="summary-data-section">
+                            <div class="summary-data-item">
+                                <div class="summary-data-icon bg-white text-primary">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div class="summary-data-text">
+                                    <div class="summary-data-label">Total Panggilan</div>
+                                    <div class="summary-data-value" id="total-calls">0</div>
+                                </div>
+                            </div>
+                            <div class="summary-data-item">
+                                <div class="summary-data-icon bg-success">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <div class="summary-data-text">
+                                    <div class="summary-data-label">Terjawab</div>
+                                    <div class="summary-data-value" id="answered">0</div>
+                                </div>
+                            </div>
+                            <div class="summary-data-item">
+                                <div class="summary-data-icon bg-danger">
+                                    <i class="bi bi-telephone-x-fill"></i>
+                                </div>
+                                <div class="summary-data-text">
+                                    <div class="summary-data-label">Terlewat</div>
+                                    <div class="summary-data-value" id="abandoned">0</div>
+                                </div>
+                            </div>
+                            <div class="summary-data-item">
+                                <div class="summary-data-icon bg-white text-primary">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                                <div class="summary-data-text">
+                                    <div class="summary-data-label">Avg Durasi</div>
+                                    <div class="summary-data-value" id="avg-call-duration">00:00:00</div>
+                                </div>
+                            </div>
+                            <div class="summary-data-item">
+                                <div class="summary-data-icon bg-white text-primary">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <div class="summary-data-text">
+                                    <div class="summary-data-label">Total Durasi</div>
+                                    <div class="summary-data-value" id="total-call-duration">00:00:00</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row text-center g-3">
-                            <div class="col-6">
-                                <div class="p-3 border rounded bg-light">
-                                    <h6>Total</h6>
-                                    <h4 id="total" class="placeholder-glow">
-                                        <span class="placeholder col-6"></span>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded bg-light">
-                                    <h6>Active</h6>
-                                    <h4 id="active" class="placeholder-glow">
-                                        <span class="placeholder col-6"></span>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded bg-light">
-                                    <h6>Handling</h6>
-                                    <h4 id="handling" class="placeholder-glow">
-                                        <span class="placeholder col-6"></span>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="p-3 border rounded bg-light">
-                                    <h6>Closed</h6>
-                                    <h4 id="closed" class="placeholder-glow">
-                                        <span class="placeholder col-6"></span>
-                                    </h4>
-                                </div>
-                            </div>
+                        <!-- Speedometer Section (Right on Desktop, Bottom on Mobile) -->
+                        <div class="summary-speedometer-section">
+                            <div id="summary-speedometer-chart" style="width: 360px; height: 100%;"></div>
                         </div>
                     </div>
-                    {{-- <div id="" style="width: 100%; height: 250px; display: none;"></div> --}}
                 </div>
             </div>
 
 
-            <!-- Kolom Kanan -->
-            <div class="col-6">
-                <div class="card shadow-sm p-4 h-100">
-                    <h5 class="mb-4">Total Tipe Laporan</h5>
-                    <div id="total-type-report-container" class="row g-3">
+            <div class="col-md-6 d-flex flex-column">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pb-0">
+                        <div>
+                            <div class="d-flex align-items-center mb-2">
+                                <span id="total-calls-service" class="fs-2 fw-bold text-dark"></span>
+                            </div>
+                            <small class="text-muted fw-semibold">Ringkasan Insiden</small>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between pt-3">
 
+                        <!-- Item: Baru -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt="" class="me-3"
+                                style="width: 30px; height: 30px; border-radius: 4px;">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a href="#" class="text-dark fw-bold text-decoration-none">Baru</a>
+                                        <div class="text-muted small">Data Insiden Baru</div>
+                                    </div>
+                                    <span id="active-calls" class="fw-bold fs-5 text-dark">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!-- Item: Proses -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt="" class="me-3"
+                                style="width: 30px; height: 30px; border-radius: 4px;">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a href="#" class="text-dark fw-bold text-decoration-none">Proses</a>
+                                        <div class="text-muted small">Data Insiden Proses</div>
+                                    </div>
+                                    <span id="handling-calls" class="fw-bold fs-5 text-dark">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!-- Item: Selesai -->
+                        <div class="d-flex align-items-center">
+                            <img src="https://cdn-icons-png.flaticon.com/512/12901/12901779.png" alt=""
+                                class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a href="#" class="text-dark fw-bold text-decoration-none">Selesai</a>
+                                        <div class="text-muted small">Data Insiden Selesai</div>
+                                    </div>
+                                    <span id="closed-calls" class="fw-bold fs-5 text-dark">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card incident-summary-card text-dark mt-5" id="total-type-report-container">
+                            <!-- JS will render here -->
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-
 
 
         <div class="row">
@@ -187,6 +548,14 @@
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
     @include('dashboards.call-center.partials.scripts.data-dispatcher')
     @include('dashboards.call-center.partials.scripts.chart-report-incident')
     @include('dashboards.call-center.partials.scripts.chart-report-daily')
@@ -204,8 +573,8 @@
             fetchTop5Districts(start, end);
             fetchTop5Dinas(start, end);
             fetchTop5ResponsiveDinas(start, end);
-            fetchSpeedmeterData(start, end);
             fetchTotalTypeReport(start, end);
+            fetchSummaryData(start, end);
 
             $('#daterange').daterangepicker({
                 startDate: start,
@@ -231,8 +600,8 @@
                 fetchTop5Dinas(start, end);
                 fetchTop5ResponsiveDinas(start, end);
                 fetchCdrHourlyChart(start, end);
-                fetchSpeedmeterData(start, end);
                 fetchTotalTypeReport(start, end);
+                fetchSummaryData(start, end);
             });
         });
     </script>
@@ -384,7 +753,6 @@
             });
         }
 
-        // FETCH FUNCTIONS
         async function fetchTop5Categories(startDate, endDate) {
             const params = {};
             if (startDate && endDate) {
@@ -449,108 +817,6 @@
             }
         }
 
-        const chartDom = document.getElementById('gaugeChart');
-        const myChart = echarts.init(chartDom);
-
-        function renderSpeedometer(serviceLevel) {
-            chartDom.style.display = 'block';
-
-            const option = {
-                title: {
-                    text: 'Service Level',
-                    left: 'center',
-                    top: 10,
-                    textStyle: {
-                        fontSize: 18,
-                        fontWeight: 'bold'
-                    }
-                },
-                series: [{
-                    type: 'gauge',
-                    startAngle: 180,
-                    endAngle: 0,
-                    center: ['50%', '75%'],
-                    radius: '90%',
-                    min: 0,
-                    max: 100,
-                    splitNumber: 10,
-                    axisLine: {
-                        lineStyle: {
-                            width: 15,
-                            color: [
-                                [0.4, '#d9534f'],
-                                [0.7, '#f0ad4e'],
-                                [1, '#5cb85c']
-                            ]
-                        }
-                    },
-                    pointer: {
-                        length: '60%',
-                        width: 6
-                    },
-                    axisTick: {
-                        show: false
-                    },
-                    splitLine: {
-                        show: false
-                    },
-                    axisLabel: {
-                        show: true,
-                        distance: -20,
-                        fontSize: 10
-                    },
-                    detail: {
-                        formatter: '{value} %',
-                        fontSize: 20,
-                        offsetCenter: [0, '-20%'],
-                        color: '#333'
-                    },
-                    data: [{
-                        value: serviceLevel
-                    }]
-                }]
-            };
-
-            myChart.setOption(option);
-        }
-
-        function updateStatCards(data) {
-            document.getElementById('total').innerHTML = data.total ?? 0;
-            document.getElementById('active').innerHTML = data.active ?? 0;
-            document.getElementById('handling').innerHTML = data.handling ?? 0;
-            document.getElementById('closed').innerHTML = data.closed ?? 0;
-        }
-
-        async function fetchSpeedmeterData(startDate, endDate) {
-            // Set placeholder dulu
-            renderSkeletonStats();
-
-            const params = {};
-            if (startDate && endDate) {
-                params.start_date = startDate.format('YYYY-MM-DD');
-                params.end_date = endDate.format('YYYY-MM-DD');
-            }
-
-            try {
-                const response = await axios.get('/dashboard/call-center/speedmeter-data', {
-                    params
-                });
-                const data = response.data.data;
-
-                updateStatCards(data);
-                renderSpeedometer(data.service_level ?? 0);
-            } catch (err) {
-                console.error('Gagal ambil data speedmeter:', err);
-                updateStatCards({
-                    total: 0,
-                    active: 0,
-                    handling: 0,
-                    closed: 0
-                });
-                renderSpeedometer(0);
-            }
-        }
-
         function renderSkeletonStats() {
             ['total', 'active', 'handling', 'closed'].forEach(id => {
                 document.getElementById(id).innerHTML = `<span class="placeholder col-6"></span>`;
@@ -560,9 +826,6 @@
         }
 
         async function fetchTotalTypeReport(startDate, endDate) {
-            const container = document.getElementById('total-type-report-container');
-            renderLoadingSkeleton(container); // Tampilkan loading dulu
-
             const params = {};
             if (startDate && endDate) {
                 params.start_date = startDate.format('YYYY-MM-DD');
@@ -573,86 +836,215 @@
                 const response = await axios.get('/dashboard/call-center/total-type-report', {
                     params
                 });
-                renderTotalTypeReport(response.data.data); // Ambil langsung objek `data`
+                const laporan = response.data.data?.type_laporan || {};
+                renderTotalTypeReport(laporan); // panggil render di sini
             } catch (err) {
-                console.error('Gagal fetch data total type report:', err);
-                container.innerHTML = '<div class="text-danger">Gagal mengambil data.</div>';
+                console.error('Gagal fetch data total tipe laporan:', err);
             }
         }
 
         function renderTotalTypeReport(data) {
             const container = document.getElementById('total-type-report-container');
-            container.innerHTML = ''; // Kosongkan skeleton
+            container.innerHTML = '';
 
-            // Card Total (besar, 1 baris penuh)
-            const totalCol = document.createElement('div');
-            totalCol.className = 'col-12';
+            const totalText = document.createElement('div');
+            totalText.className = 'mb-3';
+            totalText.innerHTML = `
+        <p class="fs-5 fw-semibold text-muted mb-2">Total Semua Laporan:
+            <span class="fw-bold text-dark">${data.total || 0}</span>
+        </p>
+    `;
+            container.appendChild(totalText);
 
-            totalCol.innerHTML = `
-                <div class="card border-primary shadow-sm h-100">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Total</h5>
-                        <h1 class="display-4 fw-bold">${data.total}</h1>
-                    </div>
-                </div>
-            `;
-            container.appendChild(totalCol);
+            const grid = document.createElement('div');
+            grid.className = 'incident-summary-grid';
 
-            // Cards lain (berdampingan)
-            const subCards = [{
+            const items = [{
+                    id: 'normal-reports',
+                    icon: 'bi bi-person-check',
+                    color: 'style="color: #ec4899;"',
                     label: 'Normal',
-                    value: data.normal,
-                    color: 'success'
+                    value: data.normal || 0
                 },
                 {
+                    id: 'prank-reports',
+                    icon: 'bi bi-emoji-angry text-danger',
+                    color: '',
                     label: 'Prank',
-                    value: data.prank,
-                    color: 'danger'
+                    value: data.prank || 0
                 },
                 {
+                    id: 'ghost-reports',
+                    icon: 'bi bi-incognito text-dark',
+                    color: '',
                     label: 'Ghost',
-                    value: data.ghost,
-                    color: 'warning'
+                    value: data.ghost || 0
                 },
                 {
+                    id: 'info-reports',
+                    icon: 'bi bi-info-circle-fill text-info',
+                    color: '',
                     label: 'Info',
-                    value: data.info,
-                    color: 'info'
-                },
+                    value: data.info || 0
+                }
             ];
 
-            subCards.forEach(card => {
-                const col = document.createElement('div');
-                col.className = 'col-6 col-md-6';
-
-                col.innerHTML = `
-                    <div class="card border-${card.color} shadow-sm h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-${card.color}">${card.label}</h6>
-                            <h3 class="fw-bold">${card.value}</h3>
-                        </div>
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'incident-item';
+                div.innerHTML = `
+                    <div class="incident-item-content">
+                        <h2 id="${item.id}" class="fw-bold">${item.value}</h2>
+                        <p class="text-muted">${item.label}</p>
                     </div>
                 `;
-                container.appendChild(col);
+                grid.appendChild(div);
             });
+
+            container.appendChild(grid);
         }
 
         function renderLoadingSkeleton(container) {
-            container.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const col = document.createElement('div');
-                col.className = 'col-12 col-sm-6 col-md-6 col-lg-6';
-
-                col.innerHTML = `
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <div class="card-placeholder w-50 mb-2"></div>
-                            <div class="card-placeholder w-100"></div>
-                        </div>
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="placeholder-glow">
+                        <div class="placeholder col-12 mb-2" style="height: 2rem;"></div>
+                        <div class="placeholder col-6" style="height: 3rem;"></div>
+                        <div class="placeholder col-6" style="height: 3rem;"></div>
                     </div>
-                `;
-                container.appendChild(col);
+                </div>
+            `;
+        }
+
+        function fetchSummaryData(startDate, endDate) {
+            const params = {};
+            if (startDate && endDate) {
+                params.start_date = startDate.format('YYYY-MM-DD');
+                params.end_date = endDate.format('YYYY-MM-DD');
             }
+
+            axios.get('/dashboard/call-center/summary-call', {
+                    params
+                })
+                .then(function(response) {
+                    var data = response.data.data;
+                    document.getElementById("answered").textContent = data.answer;
+                    document.getElementById("abandoned").textContent = data.abandon;
+                    document.getElementById("total-calls").textContent = data.total_call;
+                    document.getElementById("avg-call-duration").textContent = data.avg_call_duration;
+                    document.getElementById("total-call-duration").textContent = data.total_call_duration;
+
+                    Highcharts.chart('summary-speedometer-chart', {
+                        chart: {
+                            type: 'gauge',
+                            backgroundColor: null,
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 0,
+                            plotShadow: false,
+                            height: '100%'
+                        },
+                        title: {
+                            text: 'Speedometer SLA',
+                            style: {
+                                color: '#ffffff',
+                                fontSize: '16px'
+                            }
+                        },
+                        pane: {
+                            startAngle: -90,
+                            endAngle: 90,
+                            background: null,
+                            center: ['50%', '75%'],
+                            size: '120%'
+                        },
+                        yAxis: {
+                            min: 0,
+                            max: 100,
+                            tickPixelInterval: 72,
+                            tickPosition: 'inside',
+                            tickLength: 20,
+                            tickWidth: 2,
+                            minorTickInterval: null,
+                            labels: {
+                                distance: 20,
+                                style: {
+                                    fontSize: '16px',
+                                    color: '#ffffff'
+                                }
+                            },
+                            lineWidth: 0,
+                            plotBands: [{
+                                    from: 0,
+                                    to: 20,
+                                    color: 'rgb(173, 216, 230)',
+                                    thickness: 20
+                                },
+                                {
+                                    from: 20,
+                                    to: 40,
+                                    color: 'rgb(100, 149, 237)',
+                                    thickness: 20
+                                },
+                                {
+                                    from: 40,
+                                    to: 60,
+                                    color: 'rgb(70, 130, 180)',
+                                    thickness: 20
+                                },
+                                {
+                                    from: 60,
+                                    to: 80,
+                                    color: 'rgb(65, 105, 225)',
+                                    thickness: 20
+                                },
+                                {
+                                    from: 80,
+                                    to: 100,
+                                    color: 'rgb(0, 0, 139)',
+                                    thickness: 20
+                                }
+                            ]
+                        },
+                        series: [{
+                            name: 'SLA',
+                            data: [data.kpi_call],
+                            tooltip: {
+                                valueSuffix: ' %',
+                                backgroundColor: '#00796B',
+                                style: {
+                                    color: '#ffffff'
+                                }
+                            },
+                            dataLabels: {
+                                format: '<div style="text-align:center;"><span style="font-size:20px; color: white;">{y} %</span></div>',
+                                useHTML: true,
+                                y: 50
+                            },
+                            dial: {
+                                radius: '80%',
+                                backgroundColor: '#ffffff',
+                                baseWidth: 12,
+                                baseLength: '0%',
+                                rearLength: '0%'
+                            },
+                            pivot: {
+                                backgroundColor: '#ffffff',
+                                radius: 6
+                            }
+                        }],
+                        credits: {
+                            enabled: false
+                        },
+                        navigation: {
+                            buttonOptions: {
+                                enabled: false
+                            }
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.log("Error fetching data", error);
+                });
         }
     </script>
 @endpush

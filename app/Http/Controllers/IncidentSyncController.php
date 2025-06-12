@@ -31,8 +31,9 @@ class IncidentSyncController extends Controller
 
         $accessToken = $loginResponse['content']['access_token'];
 
-        $startDate = Carbon::create(2025, 3, 1)->startOfDay();
-        $endDate = now()->endOfDay();
+        // Ambil hanya data kemarin dan hari ini
+        $startDate = Carbon::yesterday()->startOfDay();
+        $endDate = Carbon::today()->endOfDay();
         $currentDate = $startDate;
         $totalSynced = 0;
 

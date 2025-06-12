@@ -25,8 +25,8 @@ class CdrReportSyncController extends Controller
         }
 
         $token = $loginResponse['content']['access_token'];
-        $startDate = Carbon::create(2025, 3, 1);
-        $endDate = Carbon::today();
+        $startDate = Carbon::yesterday(); // Kemarin
+        $endDate = Carbon::today();       // Hari ini
 
         $url = 'https://kotabekasiv2.sakti112.id/api/v3/layer1/laporan-cdr';
         $totalImported = 0;
@@ -80,4 +80,5 @@ class CdrReportSyncController extends Controller
             'total_imported' => $totalImported,
         ]);
     }
+
 }
