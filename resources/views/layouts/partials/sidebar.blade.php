@@ -7,7 +7,7 @@
      <div class="menu">
          <ul>
              <li>
-                 <a href="/dashboard">
+                 <a href="{{ route('dashboard.call_center.index') }}">
                      <span><i class="fi fi-rr-dashboard"></i></span>
                      <span class="nav-text">Dashboard</span>
                  </a>

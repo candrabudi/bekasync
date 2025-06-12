@@ -320,22 +320,36 @@
 @section('content')
     <div class="container">
 
-        <div class="row align-items-center justify-content-between mb-3">
-            <div class="col-xl-4 col-md-6">
+        <div class="row align-items-center justify-content-between mb-4">
+            <!-- Judul Halaman -->
+            <div class="col-xl-4 col-md-6 mb-3 mb-md-0">
                 <div class="page-title-content">
-                    <h3>Dashboard 112</h3>
-                    <p class="mb-2">Selamat Datang di Dashboard 112</p>
+                    <h3 class="mb-1 fw-bold">Dashboard 112</h3>
+                    <p class="text-muted mb-0">Selamat Datang di Dashboard 112</p>
                 </div>
             </div>
 
-            <div class="col-xl-4 col-md-6 text-end">
-                <label for="daterange" class="form-label fw-semibold mb-1" style="display: block;">
-                    Filter Tanggal
-                </label>
-                <input type="text" id="daterange" class="form-control rounded-pill"
-                    style="cursor: pointer; max-width: 250px; margin-left: auto;" readonly />
+            <!-- Filter Tanggal & Tombol -->
+            <div class="col-xl-4 col-md-6 text-md-end text-start">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-end gap-2">
+                    <!-- Input Daterange -->
+                    <div>
+                        <label for="daterange" class="form-label fw-semibold mb-1">Filter Tanggal</label>
+                        <input type="text" id="daterange"
+                            class="form-control form-control-sm rounded-pill border-secondary"
+                            style="cursor: pointer; max-width: 250px;" readonly />
+                    </div>
+                    <!-- Tombol Lihat Map -->
+                    <div class="pt-2 pt-md-4">
+                        <a href="{{ route('dispatchers.index') }}"
+                            class="btn btn-outline-primary btn-sm rounded-pill shadow-sm">
+                            <i class="bi bi-geo-alt me-1"></i> Lihat Map
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+
 
         <div class="row">
             <div class="col-xl-12">

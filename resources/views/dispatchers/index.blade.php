@@ -122,17 +122,19 @@
         </div>
         <div class="row">
             <div class="col-xxl-12">
-                <div id="statusCard">
-                    <div class="status-item online">
-                        <strong>Online:</strong> <span id="onlineCount">0</span>
-                    </div>
-                    <div class="status-item offline">
-                        <strong>Offline:</strong> <span id="offlineCount">0</span>
-                    </div>
-                </div>
-                <div id="map" style="height: 600px; width: 100%;">
-                    <button id="toggleFullscreen"
-                        style="
+                <div class="card">
+                    <div class="card-body">
+                        <div id="map" style="height: 700px; width: 100%;">
+                            <div id="statusCard">
+                                <div class="status-item online">
+                                    <strong>Online:</strong> <span id="onlineCount">0</span>
+                                </div>
+                                <div class="status-item offline">
+                                    <strong>Offline:</strong> <span id="offlineCount">0</span>
+                                </div>
+                            </div>
+                            <button id="toggleFullscreen"
+                                style="
                             position: absolute;
                             top: 10px;
                             right: 10px;
@@ -144,19 +146,22 @@
                             border-radius: 6px;
                             cursor: pointer;
                         ">
-                        ⛶ Fullscreen
-                    </button>
+                                ⛶ Fullscreen
+                            </button>
 
-                    <div id="infoPanel" class="info-panel">
-                        <div class="info-card">
-                            <button onclick="closePanel()" class="close-btn">&times;</button>
-                            <div id="panelContent">
-                                <h4>Detail Anggota</h4>
-                                <p>Silakan klik marker untuk melihat detail anggota OPD.</p>
+                            <div id="infoPanel" class="info-panel">
+                                <div class="info-card">
+                                    <button onclick="closePanel()" class="close-btn">&times;</button>
+                                    <div id="panelContent">
+                                        <h4>Detail Anggota</h4>
+                                        <p>Silakan klik marker untuk melihat detail anggota OPD.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
