@@ -54,7 +54,8 @@
 
 
         .summary-card {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #065f46 0%, #34d399 100%);
+
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             overflow: hidden;
@@ -337,8 +338,7 @@
                             style="cursor: pointer; max-width: 250px;" readonly />
                     </div>
                     <div class="pt-2 pt-md-4">
-                        <a href="{{ route('dispatchers.index') }}"
-                            class="btn btn-outline-primary btn-sm rounded-pill ">
+                        <a href="{{ route('dispatchers.index') }}" class="btn btn-outline-primary btn-sm rounded-pill ">
                             <i class="bi bi-geo-alt me-1"></i> Lihat Map
                         </a>
                     </div>
@@ -980,33 +980,33 @@
                             plotBands: [{
                                     from: 0,
                                     to: 20,
-                                    color: 'rgb(173, 216, 230)',
+                                    color: '#a7f3d0',
                                     thickness: 20
-                                },
+                                }, // hijau sangat muda
                                 {
                                     from: 20,
                                     to: 40,
-                                    color: 'rgb(100, 149, 237)',
+                                    color: '#6ee7b7',
                                     thickness: 20
                                 },
                                 {
                                     from: 40,
                                     to: 60,
-                                    color: 'rgb(70, 130, 180)',
+                                    color: '#34d399',
                                     thickness: 20
                                 },
                                 {
                                     from: 60,
                                     to: 80,
-                                    color: 'rgb(65, 105, 225)',
+                                    color: '#10b981',
                                     thickness: 20
                                 },
                                 {
                                     from: 80,
                                     to: 100,
-                                    color: 'rgb(0, 0, 139)',
+                                    color: '#065f46',
                                     thickness: 20
-                                }
+                                } // hijau tua
                             ]
                         },
                         series: [{
@@ -1014,7 +1014,7 @@
                             data: [data.kpi_call],
                             tooltip: {
                                 valueSuffix: ' %',
-                                backgroundColor: '#00796B',
+                                backgroundColor: '#065f46',
                                 style: {
                                     color: '#ffffff'
                                 }
