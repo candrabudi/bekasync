@@ -321,7 +321,6 @@
     <div class="container">
 
         <div class="row align-items-center justify-content-between mb-4">
-            <!-- Judul Halaman -->
             <div class="col-xl-4 col-md-6 mb-3 mb-md-0">
                 <div class="page-title-content">
                     <h3 class="mb-1 fw-bold">Dashboard 112</h3>
@@ -329,20 +328,17 @@
                 </div>
             </div>
 
-            <!-- Filter Tanggal & Tombol -->
             <div class="col-xl-4 col-md-6 text-md-end text-start">
                 <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-end gap-2">
-                    <!-- Input Daterange -->
                     <div>
                         <label for="daterange" class="form-label fw-semibold mb-1">Filter Tanggal</label>
                         <input type="text" id="daterange"
                             class="form-control form-control-sm rounded-pill border-secondary"
                             style="cursor: pointer; max-width: 250px;" readonly />
                     </div>
-                    <!-- Tombol Lihat Map -->
                     <div class="pt-2 pt-md-4">
                         <a href="{{ route('dispatchers.index') }}"
-                            class="btn btn-outline-primary btn-sm rounded-pill shadow-sm">
+                            class="btn btn-outline-primary btn-sm rounded-pill shadow-sm text-white">
                             <i class="bi bi-geo-alt me-1"></i> Lihat Map
                         </a>
                     </div>
@@ -362,12 +358,10 @@
 
 
 
-        <div class="row mb-5">
-            <!-- Card SLA -->
-            <div class="col-md-6">
+        <div class="row mb-4">
+            <div class="col-md-6 mt-4">
                 <div class="summary-card text-white">
                     <div class="summary-card-body">
-                        <!-- Data Section (Left on Desktop, Top on Mobile) -->
                         <div class="summary-data-section">
                             <div class="summary-data-item">
                                 <div class="summary-data-icon bg-white text-primary">
@@ -415,7 +409,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Speedometer Section (Right on Desktop, Bottom on Mobile) -->
+
                         <div class="summary-speedometer-section">
                             <div id="summary-speedometer-chart" style="width: 360px; height: 100%;"></div>
                         </div>
@@ -424,7 +418,7 @@
             </div>
 
 
-            <div class="col-md-6 d-flex flex-column">
+            <div class="col-md-6 d-flex flex-column mt-4">
                 <div class="card h-100">
                     <div class="card-header bg-white border-0 pb-0">
                         <div>
@@ -435,8 +429,6 @@
                         </div>
                     </div>
                     <div class="card-body d-flex flex-column justify-content-between pt-3">
-
-                        <!-- Item: Baru -->
                         <div class="d-flex align-items-center mb-3">
                             <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt="" class="me-3"
                                 style="width: 30px; height: 30px; border-radius: 4px;">
@@ -452,7 +444,6 @@
                         </div>
                         <hr>
 
-                        <!-- Item: Proses -->
                         <div class="d-flex align-items-center mb-3">
                             <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt="" class="me-3"
                                 style="width: 30px; height: 30px; border-radius: 4px;">
@@ -468,7 +459,6 @@
                         </div>
                         <hr>
 
-                        <!-- Item: Selesai -->
                         <div class="d-flex align-items-center">
                             <img src="https://cdn-icons-png.flaticon.com/512/12901/12901779.png" alt=""
                                 class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
