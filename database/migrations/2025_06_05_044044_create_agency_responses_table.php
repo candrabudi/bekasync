@@ -20,9 +20,9 @@ return new class extends Migration {
             $table->unsignedTinyInteger('status')->nullable();
             $table->timestamps();
 
-            $table->foreign('incident_report_id')
-                ->references('id')->on('incident_reports')
-                ->onDelete('cascade');
+            // $table->foreign('incident_report_id')
+            //     ->references('id')->on('incident_reports')
+            //     ->onDelete('cascade');
         });
 
     }

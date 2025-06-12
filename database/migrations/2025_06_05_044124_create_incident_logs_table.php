@@ -21,10 +21,9 @@ return new class extends Migration {
             $table->string('updated_by_name')->nullable();
             $table->timestamps();
 
-            // Define foreign key constraint properly
-            $table->foreign('incident_report_id')
-                ->references('id')->on('incident_reports')
-                ->onDelete('cascade');
+            // $table->foreign('incident_report_id')
+            //     ->references('id')->on('incident_reports')
+            //     ->onDelete('cascade');
         });
 
     }
