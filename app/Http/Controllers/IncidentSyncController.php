@@ -16,6 +16,7 @@ class IncidentSyncController extends Controller
     public function sync()
     {
         set_time_limit(1000);
+
         $loginResponse = Http::withHeaders([
             'accept' => 'application/json',
             'X-CSRF-TOKEN' => ''
@@ -32,7 +33,6 @@ class IncidentSyncController extends Controller
 
         $startDate = Carbon::create(2025, 3, 1)->startOfDay();
         $endDate = now()->endOfDay();
-
         $currentDate = $startDate;
         $totalSynced = 0;
 
@@ -78,8 +78,8 @@ class IncidentSyncController extends Controller
                         'subdistrict' => $item['subdistrict'] ?? null,
                         'notes' => $item['notes'] ?? null,
                         'description' => $item['description'] ?? null,
-                        'created_at' => Carbon::parse($item['created_at'])->format('Y-m-d H:i:s') ?? now(),
-                        'updated_at' => Carbon::parse($item['updated_at'])->format('Y-m-d H:i:s') ?? now(),
+                        'created_at' => $this->normalizeDatetime($item['created_at'] ?? null),
+                        'updated_at' => $this->normalizeDatetime($item['updated_at'] ?? null),
                     ]
                 );
 
@@ -100,8 +100,8 @@ class IncidentSyncController extends Controller
                                 'dinas_id' => $agency['dinas_id'] ?? null,
                                 'dinas' => $agency['dinas'] ?? null,
                                 'status' => $agency['status'] ?? null,
-                                'created_at' => Carbon::parse($agency['created_at'])->format('Y-m-d H:i:s') ?? now(),
-                                'updated_at' => Carbon::parse($agency['updated_at'])->format('Y-m-d H:i:s') ?? now(),
+                                'created_at' => $this->normalizeDatetime($agency['created_at'] ?? null),
+                                'updated_at' => $this->normalizeDatetime($agency['updated_at'] ?? null),
                             ]);
                         }
                     }
@@ -111,7 +111,7 @@ class IncidentSyncController extends Controller
                     foreach ($item['log_ticket'] as $log) {
                         $exists = IncidentLog::where('ticket', $item['ticket'])
                             ->where('status', $log['status'] ?? null)
-                            ->where('created_at', $log['created_at'] ?? now())
+                            ->where('created_at', $this->normalizeDatetime($log['created_at'] ?? null))
                             ->first();
 
                         if (!$exists) {
@@ -123,8 +123,8 @@ class IncidentSyncController extends Controller
                                 'created_by_name' => $log['created_by_name'] ?? null,
                                 'updated_by' => $log['updated_by'] ?? null,
                                 'updated_by_name' => $log['updated_by_name'] ?? null,
-                                'created_at' => Carbon::parse($log['created_at'])->format('Y-m-d H:i:s') ?? now(),
-                                'updated_at' => Carbon::parse($log['updated_at'])->format('Y-m-d H:i:s') ?? now(),
+                                'created_at' => $this->normalizeDatetime($log['created_at'] ?? null),
+                                'updated_at' => $this->normalizeDatetime($log['updated_at'] ?? null),
                             ]);
                         }
                     }
@@ -137,6 +137,18 @@ class IncidentSyncController extends Controller
 
         return response()->json(['message' => 'Sync completed', 'total_synced' => $totalSynced]);
     }
+
+    private function normalizeDatetime($value)
+    {
+        try {
+            // Try parsing and converting to UTC
+            return Carbon::parse($value)->setTimezone('UTC')->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            Log::warning("Invalid datetime format or DST gap: {$value}. Using now() instead.");
+            return now()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        }
+    }
+
 
 
 
