@@ -78,8 +78,8 @@ class IncidentSyncController extends Controller
                         'subdistrict' => $item['subdistrict'] ?? null,
                         'notes' => $item['notes'] ?? null,
                         'description' => $item['description'] ?? null,
-                        'created_at' => $item['created_at'] ?? now(),
-                        'updated_at' => $item['updated_at'] ?? now(),
+                        'created_at' => Carbon::parse($item['created_at'])->format('Y-m-d H:i:s') ?? now(),
+                        'updated_at' => Carbon::parse($item['updated_at'])->format('Y-m-d H:i:s') ?? now(),
                     ]
                 );
 
@@ -100,8 +100,8 @@ class IncidentSyncController extends Controller
                                 'dinas_id' => $agency['dinas_id'] ?? null,
                                 'dinas' => $agency['dinas'] ?? null,
                                 'status' => $agency['status'] ?? null,
-                                'created_at' => $agency['created_at'] ?? now(),
-                                'updated_at' => $agency['updated_at'] ?? now(),
+                                'created_at' => Carbon::parse($agency['created_at'])->format('Y-m-d H:i:s') ?? now(),
+                                'updated_at' => Carbon::parse($agency['updated_at'])->format('Y-m-d H:i:s') ?? now(),
                             ]);
                         }
                     }
@@ -123,8 +123,8 @@ class IncidentSyncController extends Controller
                                 'created_by_name' => $log['created_by_name'] ?? null,
                                 'updated_by' => $log['updated_by'] ?? null,
                                 'updated_by_name' => $log['updated_by_name'] ?? null,
-                                'created_at' => $log['created_at'] ?? now(),
-                                'updated_at' => $log['updated_at'] ?? now(),
+                                'created_at' => Carbon::parse($log['created_at'])->format('Y-m-d H:i:s') ?? now(),
+                                'updated_at' => Carbon::parse($log['updated_at'])->format('Y-m-d H:i:s') ?? now(),
                             ]);
                         }
                     }
