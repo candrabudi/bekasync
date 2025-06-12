@@ -338,7 +338,7 @@
                     </div>
                     <div class="pt-2 pt-md-4">
                         <a href="{{ route('dispatchers.index') }}"
-                            class="btn btn-outline-primary btn-sm rounded-pill shadow-sm text-white">
+                            class="btn btn-primary btn-sm text-white">
                             <i class="bi bi-geo-alt me-1"></i> Lihat Map
                         </a>
                     </div>
