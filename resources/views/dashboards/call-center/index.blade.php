@@ -358,7 +358,6 @@
 
 
         @if (Auth::user()->role != 'agency')
-            
             <div class="row mb-4">
                 <div class="col-md-6 mt-4">
                     <div class="summary-card text-white">
@@ -431,8 +430,8 @@
                         </div>
                         <div class="card-body d-flex flex-column justify-content-between pt-3">
                             <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt="" class="me-3"
-                                    style="width: 30px; height: 30px; border-radius: 4px;">
+                                <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt=""
+                                    class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -446,8 +445,8 @@
                             <hr>
 
                             <div class="d-flex align-items-center mb-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt="" class="me-3"
-                                    style="width: 30px; height: 30px; border-radius: 4px;">
+                                <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt=""
+                                    class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -492,7 +491,7 @@
             @include('dashboards.call-center.partials.card.card-top-categories')
             @include('dashboards.call-center.partials.card.card-top-districts')
 
-            @if (Auth::user()->role != "agency")    
+            @if (Auth::user()->role != 'agency')
                 <div class="col-xl-6">
                     <div class="card shadow-sm rounded-2xl flex flex-col h-full">
                         <div class="card-header flex justify-between items-center border-b px-4 py-3">
@@ -669,26 +668,22 @@
             const list = document.getElementById('top5-category-list');
             list.innerHTML = '';
 
-            const totalKeseluruhan = data.reduce((acc, item) => acc + Number(item.total), 0);
-            console.log('Total keseluruhan:', totalKeseluruhan);
-
             data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.classList.add('hover:bg-gray-50', 'transition-colors');
 
-                const persentase = totalKeseluruhan > 0 ?
-                    ((Number(item.total) / totalKeseluruhan) * 100).toFixed(1) + '%' :
-                    '0%';
+                const totalPerCategory = Number(item.total);
 
                 tr.innerHTML = `
             <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.category}">${truncateText(item.category)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${item.total}">${persentase}</td>
+            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalPerCategory}">${totalPerCategory}</td>
             <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
             <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
         `;
                 list.appendChild(tr);
             });
         }
+
 
 
 
@@ -696,21 +691,15 @@
             const list = document.getElementById('top5-district-list');
             list.innerHTML = '';
 
-            // Pastikan totalnya angka, supaya reduce akurat
-            const totalKeseluruhan = data.reduce((acc, item) => acc + Number(item.total), 0);
-
             data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.classList.add('hover:bg-gray-50', 'transition');
 
                 const totalItem = Number(item.total);
-                const persentase = totalKeseluruhan > 0 ?
-                    ((totalItem / totalKeseluruhan) * 100).toFixed(1) + '%' :
-                    '0%';
 
                 tr.innerHTML = `
             <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.district}">${truncateText(item.district)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800">${persentase}</td>
+            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalItem}">${totalItem}</td>
             <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
             <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
         `;
@@ -718,25 +707,20 @@
             });
         }
 
+
         function renderTop5Dinas(data) {
             const list = document.getElementById('top5-dinas-list');
             list.innerHTML = '';
-
-            // Pastikan totalnya angka supaya akurat
-            const totalKeseluruhan = data.reduce((acc, item) => acc + Number(item.total), 0);
 
             data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.classList.add('hover:bg-gray-50');
 
-                const totalItem = Number(item.total);
-                const persentase = totalKeseluruhan > 0 ?
-                    ((totalItem / totalKeseluruhan) * 100).toFixed(1) + '%' :
-                    '0%';
+                const totalData = Number(item.total);
 
                 tr.innerHTML = `
             <td class="py-2 pr-4 max-w-[160px] truncate" title="${item.dinas}">${truncateText(item.dinas, 30)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800">${persentase}</td>
+            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalData}">${totalData}</td>
             <td class="py-2 pr-4 text-center text-gray-600">${item.selesai_count}</td>
             <td class="py-2 text-center text-gray-600">${item.proses_count}</td>
         `;
