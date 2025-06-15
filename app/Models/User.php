@@ -19,10 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
+        'password',
         'role',
         'status',
-        'password',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,5 +46,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function detail()
+    {
+        return $this->hasOne(UserDetail::class);
+    }
+
+    public function isAgency()
+    {
+        return $this->role === 'agency';
+    }
+
+    public function agencyId()
+    {
+        return $this->agency_id; // sesuaikan nama kolomnya
     }
 }

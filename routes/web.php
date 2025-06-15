@@ -7,6 +7,7 @@ use App\Http\Controllers\DispatcherController;
 use App\Http\Controllers\GovernmentUnitController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\IncidentSyncController;
+use App\Http\Controllers\UserGovermentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,6 +49,13 @@ Route::get('/incidents/{id}', [IncidentController::class, 'show'])->name('incide
 
 Route::get('/government-units', [GovernmentUnitController::class, 'index'])->name('government_units.index');
 Route::get('/government-units/data', [GovernmentUnitController::class, 'data'])->name('government_units.data');
+
+Route::get('/agencies', [UserGovermentController::class, 'index'])->name('agencies.index');
+Route::get('/agencies/create', [UserGovermentController::class, 'create'])->name('agencies.create');
+Route::post('/agencies/store', [UserGovermentController::class, 'store'])->name('agencies.store');
+Route::get('/agencies/{id}/edit', [UserGovermentController::class, 'edit'])->name('agencies.edit');
+Route::post('/agencies/{id}/update', [UserGovermentController::class, 'update'])->name('agencies.update');
+Route::post('/agencies/{id}/delete', [UserGovermentController::class, 'destroy'])->name('agencies.destroy');
 
 Route::get('/sync-incident-reports', [IncidentSyncController::class, 'sync']);
 Route::get('/sync-cdr-reports', [CdrReportSyncController::class, 'sync']);

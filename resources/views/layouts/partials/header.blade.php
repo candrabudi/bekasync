@@ -7,7 +7,8 @@
                         <div class="brand-logo" style="background: none">
                             <a class="mini-logo" href="index.html">
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Coat_of_arms_of_Bekasi.png/640px-Coat_of_arms_of_Bekasi.png"
-                                    alt="" width="40"></a></div>
+                                    alt="" width="40"></a>
+                        </div>
                         <div class="search">
                             <form action="#">
                                 <div class="input-icon">
@@ -87,8 +88,8 @@
                                         <span class="thumb"><img class="rounded-full" src="images/avatar/3.jpg"
                                                 alt=""></span>
                                         <div class="user-info">
-                                            <h5>Hafsa Humaira</h5>
-                                            <span>hello@email.com</span>
+                                            <h5>{{ Auth::user()->username }} </h5>
+                                            <span>{{ Auth::user()->email }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -96,18 +97,41 @@
                                     <span><i class="fi fi-rr-user"></i></span>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="wallets.html">
-                                    <span><i class="fi fi-rr-wallet"></i></span>
-                                    Wallets
-                                </a>
-                                <a class="dropdown-item" href="settings.html">
-                                    <span><i class="fi fi-rr-settings"></i></span>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item logout" href="signin.html">
+                                <a href="#" class="dropdown-item logout">
                                     <span><i class="fi fi-bs-sign-out-alt"></i></span>
                                     Logout
                                 </a>
+
+                                <script>
+                                    document.querySelector('.logout').addEventListener('click', function(e) {
+                                        e.preventDefault();
+
+                                        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                        fetch('/logout', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': csrfToken,
+                                                    'Content-Type': 'application/json',
+                                                    'Accept': 'application/json',
+                                                },
+                                                body: JSON.stringify({}),
+                                            })
+                                            .then(response => {
+                                                if (response.ok) {
+                                                    window.location.href = '/'; // Redirect setelah logout
+                                                } else {
+                                                    alert('Logout gagal, coba lagi.');
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error logout:', error);
+                                                alert('Terjadi kesalahan saat logout.');
+                                            });
+                                    });
+                                </script>
+
+
                             </div>
                         </div>
                     </div>

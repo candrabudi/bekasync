@@ -42,4 +42,6 @@ class IncidentReport extends Model
     {
         return $this->hasMany(IncidentLog::class, 'ticket', 'ticket');
     }
+
+    
 }

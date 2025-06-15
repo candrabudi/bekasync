@@ -357,129 +357,131 @@
         </div>
 
 
+        @if (Auth::user()->role != 'agency')
+            
+            <div class="row mb-4">
+                <div class="col-md-6 mt-4">
+                    <div class="summary-card text-white">
+                        <div class="summary-card-body">
+                            <div class="summary-data-section">
+                                <div class="summary-data-item">
+                                    <div class="summary-data-icon bg-white text-primary">
+                                        <i class="bi bi-telephone"></i>
+                                    </div>
+                                    <div class="summary-data-text">
+                                        <div class="summary-data-label">Total Panggilan</div>
+                                        <div class="summary-data-value" id="total-calls">0</div>
+                                    </div>
+                                </div>
+                                <div class="summary-data-item">
+                                    <div class="summary-data-icon bg-success">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </div>
+                                    <div class="summary-data-text">
+                                        <div class="summary-data-label">Terjawab</div>
+                                        <div class="summary-data-value" id="answered">0</div>
+                                    </div>
+                                </div>
+                                <div class="summary-data-item">
+                                    <div class="summary-data-icon bg-danger">
+                                        <i class="bi bi-telephone-x-fill"></i>
+                                    </div>
+                                    <div class="summary-data-text">
+                                        <div class="summary-data-label">Terlewat</div>
+                                        <div class="summary-data-value" id="abandoned">0</div>
+                                    </div>
+                                </div>
+                                <div class="summary-data-item">
+                                    <div class="summary-data-icon bg-white text-primary">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                    <div class="summary-data-text">
+                                        <div class="summary-data-label">Avg Durasi</div>
+                                        <div class="summary-data-value" id="avg-call-duration">00:00:00</div>
+                                    </div>
+                                </div>
+                                <div class="summary-data-item">
+                                    <div class="summary-data-icon bg-white text-primary">
+                                        <i class="bi bi-clock"></i>
+                                    </div>
+                                    <div class="summary-data-text">
+                                        <div class="summary-data-label">Total Durasi</div>
+                                        <div class="summary-data-value" id="total-call-duration">00:00:00</div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6 mt-4">
-                <div class="summary-card text-white">
-                    <div class="summary-card-body">
-                        <div class="summary-data-section">
-                            <div class="summary-data-item">
-                                <div class="summary-data-icon bg-white text-primary">
-                                    <i class="bi bi-telephone"></i>
-                                </div>
-                                <div class="summary-data-text">
-                                    <div class="summary-data-label">Total Panggilan</div>
-                                    <div class="summary-data-value" id="total-calls">0</div>
-                                </div>
+                            <div class="summary-speedometer-section">
+                                <div id="summary-speedometer-chart" style="width: 360px; height: 100%;"></div>
                             </div>
-                            <div class="summary-data-item">
-                                <div class="summary-data-icon bg-success">
-                                    <i class="bi bi-telephone-fill"></i>
-                                </div>
-                                <div class="summary-data-text">
-                                    <div class="summary-data-label">Terjawab</div>
-                                    <div class="summary-data-value" id="answered">0</div>
-                                </div>
-                            </div>
-                            <div class="summary-data-item">
-                                <div class="summary-data-icon bg-danger">
-                                    <i class="bi bi-telephone-x-fill"></i>
-                                </div>
-                                <div class="summary-data-text">
-                                    <div class="summary-data-label">Terlewat</div>
-                                    <div class="summary-data-value" id="abandoned">0</div>
-                                </div>
-                            </div>
-                            <div class="summary-data-item">
-                                <div class="summary-data-icon bg-white text-primary">
-                                    <i class="bi bi-clock-history"></i>
-                                </div>
-                                <div class="summary-data-text">
-                                    <div class="summary-data-label">Avg Durasi</div>
-                                    <div class="summary-data-value" id="avg-call-duration">00:00:00</div>
-                                </div>
-                            </div>
-                            <div class="summary-data-item">
-                                <div class="summary-data-icon bg-white text-primary">
-                                    <i class="bi bi-clock"></i>
-                                </div>
-                                <div class="summary-data-text">
-                                    <div class="summary-data-label">Total Durasi</div>
-                                    <div class="summary-data-value" id="total-call-duration">00:00:00</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="summary-speedometer-section">
-                            <div id="summary-speedometer-chart" style="width: 360px; height: 100%;"></div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="col-md-6 d-flex flex-column mt-4">
-                <div class="card h-100">
-                    <div class="card-header bg-white border-0 pb-0">
-                        <div>
-                            <div class="d-flex align-items-center mb-2">
-                                <span id="total-calls-service" class="fs-2 fw-bold text-dark"></span>
+                <div class="col-md-6 d-flex flex-column mt-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-white border-0 pb-0">
+                            <div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span id="total-calls-service" class="fs-2 fw-bold text-dark"></span>
+                                </div>
+                                <small class="text-muted fw-semibold">Ringkasan Insiden</small>
                             </div>
-                            <small class="text-muted fw-semibold">Ringkasan Insiden</small>
                         </div>
-                    </div>
-                    <div class="card-body d-flex flex-column justify-content-between pt-3">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt="" class="me-3"
-                                style="width: 30px; height: 30px; border-radius: 4px;">
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <a href="#" class="text-dark fw-bold text-decoration-none">Baru</a>
-                                        <div class="text-muted small">Data Insiden Baru</div>
+                        <div class="card-body d-flex flex-column justify-content-between pt-3">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn-icons-png.flaticon.com/512/7235/7235497.png" alt="" class="me-3"
+                                    style="width: 30px; height: 30px; border-radius: 4px;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a href="#" class="text-dark fw-bold text-decoration-none">Baru</a>
+                                            <div class="text-muted small">Data Insiden Baru</div>
+                                        </div>
+                                        <span id="active-calls" class="fw-bold fs-5 text-dark">0</span>
                                     </div>
-                                    <span id="active-calls" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
-                        </div>
-                        <hr>
+                            <hr>
 
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt="" class="me-3"
-                                style="width: 30px; height: 30px; border-radius: 4px;">
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <a href="#" class="text-dark fw-bold text-decoration-none">Proses</a>
-                                        <div class="text-muted small">Data Insiden Proses</div>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn-icons-png.flaticon.com/512/9789/9789278.png" alt="" class="me-3"
+                                    style="width: 30px; height: 30px; border-radius: 4px;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a href="#" class="text-dark fw-bold text-decoration-none">Proses</a>
+                                            <div class="text-muted small">Data Insiden Proses</div>
+                                        </div>
+                                        <span id="handling-calls" class="fw-bold fs-5 text-dark">0</span>
                                     </div>
-                                    <span id="handling-calls" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
-                        </div>
-                        <hr>
+                            <hr>
 
-                        <div class="d-flex align-items-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/12901/12901779.png" alt=""
-                                class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <a href="#" class="text-dark fw-bold text-decoration-none">Selesai</a>
-                                        <div class="text-muted small">Data Insiden Selesai</div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://cdn-icons-png.flaticon.com/512/12901/12901779.png" alt=""
+                                    class="me-3" style="width: 30px; height: 30px; border-radius: 4px;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a href="#" class="text-dark fw-bold text-decoration-none">Selesai</a>
+                                            <div class="text-muted small">Data Insiden Selesai</div>
+                                        </div>
+                                        <span id="closed-calls" class="fw-bold fs-5 text-dark">0</span>
                                     </div>
-                                    <span id="closed-calls" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card incident-summary-card text-dark mt-5" id="total-type-report-container">
-                            <!-- JS will render here -->
+                            <div class="card incident-summary-card text-dark mt-5" id="total-type-report-container">
+                                <!-- JS will render here -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
+        @endif
 
 
         <div class="row">
@@ -490,54 +492,56 @@
             @include('dashboards.call-center.partials.card.card-top-categories')
             @include('dashboards.call-center.partials.card.card-top-districts')
 
-            <div class="col-xl-6">
-                <div class="card shadow-sm rounded-2xl flex flex-col h-full">
-                    <div class="card-header flex justify-between items-center border-b px-4 py-3">
-                        <h4 class="card-title text-base font-semibold text-gray-800">Top 5 Incident By OPD</h4>
-                    </div>
-                    <div class="card-body px-4 py-3 flex-grow">
-                        <div class="overflow-x-auto">
-                            <table class="table min-w-full text-sm text-left border-collapse">
-                                <thead class="text-xs text-gray-500 uppercase border-b">
-                                    <tr>
-                                        <th class="py-2 pr-4">OPD</th>
-                                        <th class="py-2 pr-4 text-center">Total</th>
-                                        <th class="py-2 pr-4 text-center">Closed`</th>
-                                        <th class="py-2 text-center">Open</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="top5-dinas-list" class="divide-y divide-gray-100">
-                                    <!-- JS inject -->
-                                </tbody>
-                            </table>
+            @if (Auth::user()->role != "agency")    
+                <div class="col-xl-6">
+                    <div class="card shadow-sm rounded-2xl flex flex-col h-full">
+                        <div class="card-header flex justify-between items-center border-b px-4 py-3">
+                            <h4 class="card-title text-base font-semibold text-gray-800">Top 5 Incident By OPD</h4>
+                        </div>
+                        <div class="card-body px-4 py-3 flex-grow">
+                            <div class="overflow-x-auto">
+                                <table class="table min-w-full text-sm text-left border-collapse">
+                                    <thead class="text-xs text-gray-500 uppercase border-b">
+                                        <tr>
+                                            <th class="py-2 pr-4">OPD</th>
+                                            <th class="py-2 pr-4 text-center">Total</th>
+                                            <th class="py-2 pr-4 text-center">Closed`</th>
+                                            <th class="py-2 text-center">Open</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top5-dinas-list" class="divide-y divide-gray-100">
+                                        <!-- JS inject -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-6">
-                <div class="card shadow-sm rounded-2xl">
-                    <div class="card-header flex justify-between items-center border-b px-4 py-3">
-                        <h4 class="card-title text-base font-semibold text-gray-800">Top 5 Most Responsive OPD</h4>
-                    </div>
-                    <div class="card-body px-4 py-3">
-                        <div class="overflow-x-auto">
-                            <table class="table min-w-full text-sm text-left border-collapse">
-                                <thead class="text-xs text-gray-500 uppercase border-b">
-                                    <tr>
-                                        <th class="py-2 pr-4 font-medium max-w-[150px]">Dinas</th>
-                                        <th class="py-2 pr-4 font-medium text-center">Total Response</th>
-                                        <th class="py-2 font-medium text-center">AVG Response (second)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="top5-responsive-dinas-list" class="divide-y divide-gray-100">
-                                    <!-- Data inject by JS -->
-                                </tbody>
-                            </table>
+                <div class="col-xl-6">
+                    <div class="card shadow-sm rounded-2xl">
+                        <div class="card-header flex justify-between items-center border-b px-4 py-3">
+                            <h4 class="card-title text-base font-semibold text-gray-800">Top 5 Most Responsive OPD</h4>
+                        </div>
+                        <div class="card-body px-4 py-3">
+                            <div class="overflow-x-auto">
+                                <table class="table min-w-full text-sm text-left border-collapse">
+                                    <thead class="text-xs text-gray-500 uppercase border-b">
+                                        <tr>
+                                            <th class="py-2 pr-4 font-medium max-w-[150px]">Dinas</th>
+                                            <th class="py-2 pr-4 font-medium text-center">Total Response</th>
+                                            <th class="py-2 font-medium text-center">AVG Response (second)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top5-responsive-dinas-list" class="divide-y divide-gray-100">
+                                        <!-- Data inject by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
         @include('dashboards.call-center.partials.card.card-graphic-telphone')
         @include('dashboards.call-center.partials.card.card-list-user')

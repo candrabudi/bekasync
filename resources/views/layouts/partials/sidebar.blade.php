@@ -25,7 +25,7 @@
                  </a>
              </li>
              <li>
-                 <a href="/settings">
+                 <a href="{{ route('government_units.index') }}">
                      <span><i class="fi fi-rr-settings-sliders"></i></span>
                      <span class="nav-text">Pengaturan</span>
                  </a>

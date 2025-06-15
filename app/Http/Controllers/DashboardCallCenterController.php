@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\IncidentReport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -65,10 +66,11 @@ class DashboardCallCenterController extends Controller
 
     public function dataCardIncident(Request $request)
     {
+        $user = Auth::user();
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $query = IncidentReport::whereNotNull('category');
+        $query = IncidentReport::whereNotNull('category')->where('category', '!=', '-');
 
         if ($startDate && $endDate) {
             $query->whereDate('created_at', '>=', $startDate)
@@ -77,7 +79,13 @@ class DashboardCallCenterController extends Controller
             $today = Carbon::today();
             $query->whereDate('created_at', $today);
         }
-        $query->where('category', '!=', '-');
+
+        if ($user->role === 'agency') {
+            // Filter hanya laporan yang agency_responses nya sesuai agency user
+            $query->whereHas('agencyResponses', function ($q) use ($user) {
+                $q->where('dinas_id', $user->agency_id);
+            });
+        }
 
         $statusBaru = (clone $query)->where('status', 1)->count();
         $statusDiproses = (clone $query)->where('status', 2)->count();
@@ -91,8 +99,10 @@ class DashboardCallCenterController extends Controller
             'total' => $total,
         ]);
     }
+
     public function getDailyReportChartDataPerHour(Request $request)
     {
+        $user = Auth::user();
         $startDate = $request->input('start_date') ?? Carbon::today()->toDateString();
         $endDate = $request->input('end_date') ?? Carbon::today()->toDateString();
 
@@ -102,23 +112,28 @@ class DashboardCallCenterController extends Controller
         $hours = range(0, 23);
         $labels = array_map(fn($h) => sprintf('%02d:00', $h), $hours);
 
-        $countPerStatusPerHour = function ($status) use ($start, $end, $hours) {
+        $countPerStatusPerHour = function ($status) use ($start, $end, $hours, $user) {
             $counts = [];
 
             foreach ($hours as $hour) {
                 $startHour = (clone $start)->setTime($hour, 0, 0);
                 $endHour = (clone $start)->setTime($hour, 59, 59);
 
-                $count = IncidentReport::where('status', $status)
+                $query = IncidentReport::where('status', $status)
                     ->whereDate('created_at', '>=', $start)
                     ->whereDate('created_at', '<=', $end)
                     ->whereTime('created_at', '>=', $startHour->toTimeString())
                     ->whereTime('created_at', '<=', $endHour->toTimeString())
                     ->whereNotNull('category')
-                    ->where('category', '!=', '-')
-                    ->count();
+                    ->where('category', '!=', '-');
 
-                $counts[] = $count;
+                if ($user->role === 'agency') {
+                    $query->whereHas('agencyResponses', function ($q) use ($user) {
+                        $q->where('dinas_id', $user->agency_id);
+                    });
+                }
+
+                $counts[] = $query->count();
             }
 
             return $counts;
@@ -153,9 +168,9 @@ class DashboardCallCenterController extends Controller
         ]);
     }
 
-
     public function getDailyReportChartDataPerDay(Request $request)
     {
+        $user = Auth::user();
         $period = $request->input('period', 'last7days');
 
         $today = Carbon::today();
@@ -181,12 +196,19 @@ class DashboardCallCenterController extends Controller
             $periodDate->addDay();
         }
 
-        $rawData = IncidentReport::selectRaw("DATE(created_at) as date, COUNT(*) as total")
+        $query = IncidentReport::selectRaw("DATE(created_at) as date, COUNT(*) as total")
             ->whereDate('created_at', '>=', $start)
             ->whereDate('created_at', '<=', $end)
             ->whereNotNull('category')
-            ->where('category', '!=', '-')
-            ->groupByRaw("DATE(created_at)")
+            ->where('category', '!=', '-');
+
+        if ($user->role === 'agency') {
+            $query->whereHas('agencyResponses', function ($q) use ($user) {
+                $q->where('dinas_id', $user->agency_id);
+            });
+        }
+
+        $rawData = $query->groupByRaw("DATE(created_at)")
             ->pluck('total', 'date');
 
         $labels = [];
@@ -220,13 +242,14 @@ class DashboardCallCenterController extends Controller
 
     public function getTop5IncidentByCategories(Request $request)
     {
+        $user = Auth::user();
         $startDate = $request->input('start_date') ?? Carbon::today()->toDateString();
         $endDate = $request->input('end_date') ?? Carbon::today()->toDateString();
 
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $data = DB::table('incident_reports')
+        $query = DB::table('incident_reports')
             ->select(
                 'category',
                 DB::raw("SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) as total"),
@@ -236,8 +259,14 @@ class DashboardCallCenterController extends Controller
             ->whereNotNull('category')
             ->where('category', '!=', '-')
             ->whereDate('created_at', '>=', $start)
-            ->whereDate('created_at', '<=', $end)
-            ->groupBy('category')
+            ->whereDate('created_at', '<=', $end);
+
+        if ($user->role === 'agency') {
+            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
+                ->where('agency_responses.dinas_id', $user->agency_id);
+        }
+
+        $data = $query->groupBy('category')
             ->orderByDesc('total')
             ->limit(5)
             ->get();
@@ -245,16 +274,16 @@ class DashboardCallCenterController extends Controller
         return response()->json($data);
     }
 
-
     public function getTop5IncidentByDistrict(Request $request)
     {
+        $user = Auth::user();
         $startDate = $request->input('start_date') ?? Carbon::today()->toDateString();
         $endDate = $request->input('end_date') ?? Carbon::today()->toDateString();
 
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $data = DB::table('incident_reports')
+        $query = DB::table('incident_reports')
             ->select(
                 'district',
                 DB::raw("SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) as total"),
@@ -264,15 +293,20 @@ class DashboardCallCenterController extends Controller
             ->whereNotNull('district')
             ->where('district', '!=', '-')
             ->whereDate('created_at', '>=', $start)
-            ->whereDate('created_at', '<=', $end)
-            ->groupBy('district')
+            ->whereDate('created_at', '<=', $end);
+
+        if ($user->role === 'agency') {
+            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
+                ->where('agency_responses.dinas_id', $user->agency_id);
+        }
+
+        $data = $query->groupBy('district')
             ->orderByDesc('total')
             ->limit(5)
             ->get();
 
         return response()->json($data);
     }
-
     public function getTop5IncidentByDinas(Request $request)
     {
         $startDate = $request->input('start_date') ?? Carbon::today()->toDateString();

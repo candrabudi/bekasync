@@ -27,6 +27,6 @@
 </style>
 
 <div class="settings-menu">
-    <a href="settings.html" class="active">Data OPD</a>
-    <a href="settings-general.html">Data Pengguna</a>
+    <a href="{{ route('government_units.index') }}">Data OPD</a>
+    <a href="{{ route('agencies.index') }}">User OPD</a>
 </div>
