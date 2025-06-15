@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login | Patriot Kota Bekasi</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style_new.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/toastr.min.css') }}">
 </head>
 
 <body class="dashboard light-theme">

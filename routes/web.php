@@ -5,6 +5,7 @@ use App\Http\Controllers\CdrReportSyncController;
 use App\Http\Controllers\DashboardCallCenterController;
 use App\Http\Controllers\DispatcherController;
 use App\Http\Controllers\GovernmentUnitController;
+use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\IncidentSyncController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,10 @@ Route::prefix('dispatchers')->name('dispatchers.')->group(function () {
     Route::get('/list', [DispatcherController::class, 'getDispatcherList'])->name('list');
 
 });
+
+Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
+Route::get('/incidents/data', [IncidentController::class, 'fetch'])->name('incidents.fetch');
+Route::get('/incidents/{id}', [IncidentController::class, 'show'])->name('incidents.show');
 
 Route::get('/government-units', [GovernmentUnitController::class, 'index'])->name('government_units.index');
 Route::get('/government-units/data', [GovernmentUnitController::class, 'data'])->name('government_units.data');

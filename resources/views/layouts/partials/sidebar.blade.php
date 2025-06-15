@@ -13,7 +13,7 @@
                  </a>
              </li>
              <li>
-                 <a href="/call-center">
+                 <a href="{{ route('incidents.index') }}">
                      <span><i class="fi fi-rr-phone-call"></i></span>
                      <span class="nav-text">112</span>
                  </a>
