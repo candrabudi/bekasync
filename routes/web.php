@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CdrReportSyncController;
 use App\Http\Controllers\DashboardCallCenterController;
+use App\Http\Controllers\DashboardOmniController;
 use App\Http\Controllers\DispatcherController;
 use App\Http\Controllers\GovernmentUnitController;
 use App\Http\Controllers\IncidentController;
@@ -35,6 +36,14 @@ Route::prefix('dashboard/call-center')->name('dashboard.call_center.')->group(fu
     Route::get('/total-type-report', [DashboardCallCenterController::class, 'getTotalTypeReport'])->name('get_total_type_report');
     Route::get('/summary-call', [DashboardCallCenterController::class, 'wallBoardGetSummaryCall'])->name('wallboard_get_summary_call');
 
+});
+
+Route::prefix('dashboard/omni-channel')->name('dashboard.omni_channel.')->group(function () {
+    Route::get('/', [DashboardOmniController::class, 'index'])->name('index');
+    Route::get('/active-agent', [DashboardOmniController::class, 'activeAgent'])->name('activeAgent');
+    Route::get('/conversations-summary', [DashboardOmniController::class, 'conversationsSummary'])->name('conversationsSummary');
+    Route::get('/whatsapp-usage', [DashboardOmniController::class, 'whatsappUsage'])->name('whatsappUsage');
+    Route::get('/agent-performance', [DashboardOmniController::class, 'agentPerformance'])->name('agentPerformance');
 });
 
 Route::prefix('dispatchers')->name('dispatchers.')->group(function () {
