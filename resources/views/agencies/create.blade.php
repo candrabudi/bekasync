@@ -48,10 +48,10 @@
                                     <option value="">- Pilih -</option>
                                     <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>
                                         Superadmin</option>
-                                    <option value="mayor" {{ old('role') == 'mayor' ? 'selected' : '' }}>Mayor</option>
+                                    <option value="mayor" {{ old('role') == 'mayor' ? 'selected' : '' }}>Walikota</option>
                                     <option value="deputy_mayor" {{ old('role') == 'deputy_mayor' ? 'selected' : '' }}>
-                                        Deputy Mayor</option>
-                                    <option value="agency" {{ old('role') == 'agency' ? 'selected' : '' }}>Agency</option>
+                                        Wakil Walikota</option>
+                                    <option value="agency" {{ old('role') == 'agency' ? 'selected' : '' }}>OPD</option>
                                 </select>
                                 @error('role')
                                     <div class="invalid-feedback">{{ $message }}</div>

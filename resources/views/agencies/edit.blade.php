@@ -51,12 +51,12 @@
                                         {{ old('role', $agency->role) == 'superadmin' ? 'selected' : '' }}>Superadmin
                                     </option>
                                     <option value="mayor" {{ old('role', $agency->role) == 'mayor' ? 'selected' : '' }}>
-                                        Mayor</option>
+                                        Walikota</option>
                                     <option value="deputy_mayor"
-                                        {{ old('role', $agency->role) == 'deputy_mayor' ? 'selected' : '' }}>Deputy Mayor
+                                        {{ old('role', $agency->role) == 'deputy_mayor' ? 'selected' : '' }}>Wakil Walikota
                                     </option>
                                     <option value="agency" {{ old('role', $agency->role) == 'agency' ? 'selected' : '' }}>
-                                        Agency</option>
+                                        OPD</option>
                                 </select>
                                 @error('role')
                                     <div class="invalid-feedback">{{ $message }}</div>
