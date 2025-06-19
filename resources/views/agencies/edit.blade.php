@@ -43,6 +43,28 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                                <select id="role" name="role"
+                                    class="form-select @error('role') is-invalid @enderror" required>
+                                    <option value="">- Pilih -</option>
+                                    <option value="superadmin"
+                                        {{ old('role', $agency->role) == 'superadmin' ? 'selected' : '' }}>Superadmin
+                                    </option>
+                                    <option value="mayor" {{ old('role', $agency->role) == 'mayor' ? 'selected' : '' }}>
+                                        Mayor</option>
+                                    <option value="deputy_mayor"
+                                        {{ old('role', $agency->role) == 'deputy_mayor' ? 'selected' : '' }}>Deputy Mayor
+                                    </option>
+                                    <option value="agency" {{ old('role', $agency->role) == 'agency' ? 'selected' : '' }}>
+                                        Agency</option>
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+
+                            <div class="mb-3">
                                 <label for="full_name" class="form-label">Nama Lengkap <span
                                         class="text-danger">*</span></label>
                                 <input id="full_name" type="text" name="full_name"

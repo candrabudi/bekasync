@@ -36,12 +36,14 @@ class UserGovermentController extends Controller
             'email'              => 'nullable|email',
             'phone_number'       => 'nullable|string',
             'government_unit_id' => 'nullable|exists:government_units,id',
+            'role'               => 'required|in:superadmin,mayor,deputy_mayor,agency',
         ]);
+
 
         $user = User::create([
             'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'role'     => 'agency',
+            'role'     => $validated['role'],
         ]);
 
         $user->detail()->create([
@@ -69,7 +71,6 @@ class UserGovermentController extends Controller
 
     public function update(Request $request, User $agency)
     {
-
         $validated = $request->validate([
             'username'           => ['required', Rule::unique('users')->ignore($agency->id)],
             'password'           => 'nullable|min:6',
@@ -77,10 +78,12 @@ class UserGovermentController extends Controller
             'email'              => 'nullable|email',
             'phone_number'       => 'nullable|string',
             'government_unit_id' => 'nullable|exists:government_units,id',
+            'role'               => 'required|in:superadmin,mayor,deputy_mayor,agency',
         ]);
 
         $agency->update([
             'username' => $validated['username'],
+            'role'     => $validated['role'],
             'password' => $validated['password']
                 ? Hash::make($validated['password'])
                 : $agency->password,
