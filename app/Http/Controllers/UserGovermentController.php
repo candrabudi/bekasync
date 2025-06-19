@@ -60,7 +60,6 @@ class UserGovermentController extends Controller
     {
         $agency = User::where('id', $a)
             ->first();
-        abort_if($agency->role !== 'superadmin', 403);
 
         $units  = GovernmentUnit::all();
         $detail = $agency->detail;
@@ -70,7 +69,6 @@ class UserGovermentController extends Controller
 
     public function update(Request $request, User $agency)
     {
-        abort_if($agency->role !== 'superadmin', 403);
 
         $validated = $request->validate([
             'username'           => ['required', Rule::unique('users')->ignore($agency->id)],
@@ -105,7 +103,6 @@ class UserGovermentController extends Controller
 
     public function destroy(User $agency)
     {
-        abort_if($agency->role !== 'superadmin', 403);
 
         $agency->delete();
 
