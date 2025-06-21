@@ -35,7 +35,6 @@ Route::prefix('dashboard/call-center')->name('dashboard.call_center.')->group(fu
     Route::get('/speedmeter-data', [DashboardCallCenterController::class, 'getSpeedmeterData'])->name('get_speedmeter_data');
     Route::get('/total-type-report', [DashboardCallCenterController::class, 'getTotalTypeReport'])->name('get_total_type_report');
     Route::get('/summary-call', [DashboardCallCenterController::class, 'wallBoardGetSummaryCall'])->name('wallboard_get_summary_call');
-
 });
 
 Route::prefix('dashboard/omni-channel')->name('dashboard.omni_channel.')->group(function () {
@@ -49,7 +48,6 @@ Route::prefix('dashboard/omni-channel')->name('dashboard.omni_channel.')->group(
 Route::prefix('dispatchers')->name('dispatchers.')->group(function () {
     Route::get('/', [DispatcherController::class, 'index'])->name('index');
     Route::get('/list', [DispatcherController::class, 'getDispatcherList'])->name('list');
-
 });
 
 Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
@@ -68,3 +66,12 @@ Route::post('/agencies/{id}/delete', [UserGovermentController::class, 'destroy']
 
 Route::get('/sync-incident-reports', [IncidentSyncController::class, 'sync']);
 Route::get('/sync-cdr-reports', [CdrReportSyncController::class, 'sync']);
+
+Route::prefix('sosmed')->controller(DashboardOmniController::class)->group(function () {
+    Route::post('/active-agents', 'getActiveAgents');
+    Route::post('/subscription', 'getSubscription');
+    Route::post('/agent-performance', 'getAgentPerformance');
+    Route::post('/conversation-summary', 'getConversationSummary');
+    Route::post('/top-tags', 'getTopTags');
+    Route::post('/wa-usage', 'getWaUsage');
+});
