@@ -69,10 +69,12 @@ class UserGovermentController extends Controller
         return view('agencies.edit', compact('agency', 'detail', 'units'));
     }
 
-    public function update(Request $request, User $agency)
+    public function update(Request $request, $a)
     {
+        $agency = User::findOrFail($a);
+
         $validated = $request->validate([
-            'username'           => ['required', Rule::unique('users')->ignore($agency->id)],
+            'username'           => 'required',
             'password'           => 'nullable|min:6',
             'full_name'          => 'required|string|max:255',
             'email'              => 'nullable|email',
@@ -80,6 +82,16 @@ class UserGovermentController extends Controller
             'government_unit_id' => 'nullable|exists:government_units,id',
             'role'               => 'required|in:superadmin,mayor,deputy_mayor,agency',
         ]);
+
+        $isDuplicate = User::where('username', $validated['username'])
+            ->where('id', '!=', $a)
+            ->exists();
+
+        if ($isDuplicate) {
+            return back()
+                ->withErrors(['username' => 'Username sudah digunakan oleh user lain.'])
+                ->withInput();
+        }
 
         $agency->update([
             'username' => $validated['username'],

@@ -13,7 +13,11 @@ class DashboardCallCenterController extends Controller
 {
     public function index()
     {
-        return view('dashboards.call-center.index');
+        if (Auth::user()->role == 'agency') {
+            return view('dashboards.call-center.opd');
+        } else {
+            return view('dashboards.call-center.index');
+        }
     }
 
     public function getDispatcher(Request $request)
@@ -73,23 +77,21 @@ class DashboardCallCenterController extends Controller
         $query = IncidentReport::whereNotNull('category')->where('category', '!=', '-');
 
         if ($startDate && $endDate) {
-            $query->whereDate('created_at', '>=', $startDate)
-                ->whereDate('created_at', '<=', $endDate);
+            $query->whereDate('incident_reports.created_at', '>=', $startDate)
+                ->whereDate('incident_reports.created_at', '<=', $endDate);
         } else {
             $today = Carbon::today();
-            $query->whereDate('created_at', $today);
+            $query->whereDate('incident_reports.created_at', $today);
         }
 
         if ($user->role === 'agency') {
-            // Filter hanya laporan yang agency_responses nya sesuai agency user
-            $query->whereHas('agencyResponses', function ($q) use ($user) {
-                $q->where('dinas_id', $user->agency_id);
-            });
+            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
+                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
         }
 
-        $statusBaru = (clone $query)->where('status', 1)->count();
-        $statusDiproses = (clone $query)->where('status', 2)->count();
-        $statusSelesai = (clone $query)->where('status', 3)->count();
+        $statusBaru = (clone $query)->where('incident_reports.status', 1)->count();
+        $statusDiproses = (clone $query)->where('incident_reports.status', 2)->count();
+        $statusSelesai = (clone $query)->where('incident_reports.status', 3)->count();
         $total = (clone $query)->count();
 
         return response()->json([
@@ -129,7 +131,7 @@ class DashboardCallCenterController extends Controller
 
                 if ($user->role === 'agency') {
                     $query->whereHas('agencyResponses', function ($q) use ($user) {
-                        $q->where('dinas_id', $user->agency_id);
+                        $q->where('dinas', $user->detail->governmentUnit->name);
                     });
                 }
 
@@ -252,18 +254,18 @@ class DashboardCallCenterController extends Controller
         $query = DB::table('incident_reports')
             ->select(
                 'category',
-                DB::raw("SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) as total"),
-                DB::raw("SUM(CASE WHEN status = '3' THEN 1 ELSE 0 END) as selesai_count"),
-                DB::raw("SUM(CASE WHEN status = '2' THEN 1 ELSE 0 END) as proses_count")
+                DB::raw("SUM(CASE WHEN incident_reports.status IN (2, 3) THEN 1 ELSE 0 END) as total"),
+                DB::raw("SUM(CASE WHEN incident_reports.status = '3' THEN 1 ELSE 0 END) as selesai_count"),
+                DB::raw("SUM(CASE WHEN incident_reports.status = '2' THEN 1 ELSE 0 END) as proses_count")
             )
             ->whereNotNull('category')
             ->where('category', '!=', '-')
-            ->whereDate('created_at', '>=', $start)
-            ->whereDate('created_at', '<=', $end);
+            ->whereDate('incident_reports.created_at', '>=', $start)
+            ->whereDate('incident_reports.created_at', '<=', $end);
 
         if ($user->role === 'agency') {
             $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
-                ->where('agency_responses.dinas_id', $user->agency_id);
+                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
         }
 
         $data = $query->groupBy('category')
@@ -286,18 +288,18 @@ class DashboardCallCenterController extends Controller
         $query = DB::table('incident_reports')
             ->select(
                 'district',
-                DB::raw("SUM(CASE WHEN status IN (2, 3) THEN 1 ELSE 0 END) as total"),
-                DB::raw("SUM(CASE WHEN status = '2' THEN 1 ELSE 0 END) as selesai_count"),
-                DB::raw("SUM(CASE WHEN status = '3' THEN 1 ELSE 0 END) as proses_count")
+                DB::raw("SUM(CASE WHEN incident_reports.status IN (2, 3) THEN 1 ELSE 0 END) as total"),
+                DB::raw("SUM(CASE WHEN incident_reports.status = '2' THEN 1 ELSE 0 END) as selesai_count"),
+                DB::raw("SUM(CASE WHEN incident_reports.status = '3' THEN 1 ELSE 0 END) as proses_count")
             )
             ->whereNotNull('district')
             ->where('district', '!=', '-')
-            ->whereDate('created_at', '>=', $start)
-            ->whereDate('created_at', '<=', $end);
+            ->whereDate('incident_reports.created_at', '>=', $start)
+            ->whereDate('incident_reports.created_at', '<=', $end);
 
         if ($user->role === 'agency') {
             $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
-                ->where('agency_responses.dinas_id', $user->agency_id);
+                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
         }
 
         $data = $query->groupBy('district')
@@ -457,5 +459,4 @@ class DashboardCallCenterController extends Controller
 
         return response()->json($response->json());
     }
-
 }
