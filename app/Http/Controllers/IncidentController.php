@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\IncidentReport;
 use App\Models\AgencyResponse;
 use App\Models\IncidentLog;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class IncidentController extends Controller
@@ -21,6 +22,7 @@ class IncidentController extends Controller
 
     public function fetch(Request $request)
     {
+        $user = Auth::user();
         $query = IncidentReport::query();
 
         if ($request->search) {
@@ -53,6 +55,11 @@ class IncidentController extends Controller
 
         if ($request->subdistrict) {
             $query->where('subdistrict', $request->subdistrict);
+        }
+
+        if ($user->role === 'agency') {
+            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
+                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
         }
 
         return response()->json(

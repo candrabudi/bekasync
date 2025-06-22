@@ -1,7 +1,8 @@
  <div class="sidebar">
      <div class="brand-logo" style="background: none">
          <a class="full-logo" href="index.html">
-             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Coat_of_arms_of_Bekasi.png/640px-Coat_of_arms_of_Bekasi.png" width="42" alt="">
+             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Coat_of_arms_of_Bekasi.png/640px-Coat_of_arms_of_Bekasi.png"
+                 width="42" alt="">
          </a>
      </div>
      <div class="menu">
@@ -18,18 +19,22 @@
                      <span class="nav-text">112</span>
                  </a>
              </li>
-             <li>
-                 <a href="/omni-channel">
-                     <span><i class="fi fi-rr-comment-alt-dots"></i></span>
-                     <span class="nav-text">Omni</span>
-                 </a>
-             </li>
-             <li>
-                 <a href="{{ route('government_units.index') }}">
-                     <span><i class="fi fi-rr-settings-sliders"></i></span>
-                     <span class="nav-text">Pengaturan</span>
-                 </a>
-             </li>
+             @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'mayor')
+                 <li>
+                     <a href="/omni-channel">
+                         <span><i class="fi fi-rr-comment-alt-dots"></i></span>
+                         <span class="nav-text">Omni</span>
+                     </a>
+                 </li>
+             @endif
+             @if (Auth::user()->role == 'superadmin')
+                 <li>
+                     <a href="{{ route('government_units.index') }}">
+                         <span><i class="fi fi-rr-settings-sliders"></i></span>
+                         <span class="nav-text">Pengaturan</span>
+                     </a>
+                 </li>
+             @endif
          </ul>
 
      </div>

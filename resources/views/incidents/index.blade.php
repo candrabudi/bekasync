@@ -2,24 +2,24 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mb-4">Incident List</h2>
+        <h2 class="mb-4">Daftar Insiden</h2>
 
-        {{-- FILTERS --}}
+        {{-- FILTER --}}
         <div class="card mb-4 shadow-sm">
             <div class="card-body">
                 <div class="row g-2 align-items-end">
                     <div class="col-md-3">
-                        <input type="text" id="search" class="form-control" placeholder="Search ticket/caller/phone">
+                        <input type="text" id="search" class="form-control" placeholder="Cari tiket/penelepon/telepon">
                     </div>
                     <div class="col-md-2">
-                        <input type="text" id="start_date" class="form-control" placeholder="Start date">
+                        <input type="text" id="start_date" class="form-control" placeholder="Tanggal mulai">
                     </div>
                     <div class="col-md-2">
-                        <input type="text" id="end_date" class="form-control" placeholder="End date">
+                        <input type="text" id="end_date" class="form-control" placeholder="Tanggal akhir">
                     </div>
                     <div class="col-md-2">
                         <select id="category" class="form-select">
-                            <option value="">All Categories</option>
+                            <option value="">Semua Kategori</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category }}">{{ $category }}</option>
                             @endforeach
@@ -27,11 +27,11 @@
                     </div>
                     <div class="col-md-2">
                         <select id="status" class="form-select">
-                            <option value="">All Status</option>
-                            <option value="1">Open</option>
-                            <option value="2">In Progress</option>
-                            <option value="3">Closed</option>
-                            <option value="4">Pending</option>
+                            <option value="">Semua Status</option>
+                            <option value="1">Terbuka</option>
+                            <option value="2">Dalam Proses</option>
+                            <option value="3">Selesai</option>
+                            <option value="4">Tertunda</option>
                         </select>
                     </div>
                     <div class="col-md-3 mt-2">
@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-2">
                         <select id="district" class="form-select">
-                            <option value="">All Districts</option>
+                            <option value="">Semua Kecamatan</option>
                             @foreach ($districts as $district)
                                 <option value="{{ $district }}">{{ $district }}</option>
                             @endforeach
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-md-2">
                         <select id="subdistrict" class="form-select">
-                            <option value="">All Subdistricts</option>
+                            <option value="">Semua Kelurahan</option>
                             @foreach ($subdistricts as $subdistrict)
                                 <option value="{{ $subdistrict }}">{{ $subdistrict }}</option>
                             @endforeach
@@ -65,10 +65,10 @@
             <div class="spinner-border text-primary" role="status"></div>
         </div>
 
-        {{-- CARDS --}}
+        {{-- KARTU --}}
         <div id="incidentCards" class="row g-3"></div>
 
-        {{-- PAGINATION --}}
+        {{-- PAGINASI --}}
         <nav>
             <ul class="pagination justify-content-center mt-4" id="pagination"></ul>
         </nav>
@@ -115,19 +115,31 @@
                 })
                 .then(response => {
                     const data = response.data;
+
+                    function formatTanggalIndonesia(datetime) {
+                        const options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        };
+                        return new Date(datetime).toLocaleDateString('id-ID', options);
+                    }
                     const cards = data.data.map(item => `
                         <div class="col-md-6 col-lg-4">
                             <div class="card shadow-sm h-100 border-0">
                                 <div class="card-body">
                                     <h5 class="fw-bold text-primary">${item.ticket}</h5>
                                     <span class="badge bg-${getStatusColor(item.status)} mb-2">${getStatusLabel(item.status)}</span>
-                                    <p class="mb-1"><strong>Caller:</strong> ${item.caller ?? '-'}</p>
-                                    <p class="mb-1"><strong>Phone:</strong> ${item.phone ?? '-'}</p>
-                                    <p class="mb-1"><strong>Category:</strong> ${item.category ?? '-'}</p>
-                                    <p class="mb-1"><strong>Location:</strong> ${item.location ?? '-'}</p>
+                                    <p class="mb-1"><strong>Penelepon:</strong> ${item.caller ?? '-'}</p>
+                                    <p class="mb-1"><strong>Telepon:</strong> ${item.phone ?? '-'}</p>
+                                    <p class="mb-1"><strong>Kategori:</strong> ${item.category ?? '-'}</p>
+                                    <p class="mb-1"><strong>Lokasi:</strong> ${item.location ?? '-'}</p>
                                     <p class="small text-muted">${item.district ?? ''} ${item.subdistrict ? '- ' + item.subdistrict : ''}</p>
                                     <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <small class="text-muted">${item.incident_created_at}</small>
+                                       <small class="text-muted">${formatTanggalIndonesia(item.created_at)}</small>
+
                                         <a href="/incidents/${item.id}" class="btn btn-sm btn-outline-primary">Detail</a>
                                     </div>
                                 </div>
@@ -136,12 +148,12 @@
                     `).join('');
 
                     document.getElementById('incidentCards').innerHTML = cards ||
-                        `<div class="text-center">No incidents found.</div>`;
+                        `<div class="text-center">Tidak ada insiden ditemukan.</div>`;
                     renderPagination(data);
                 })
                 .catch(() => {
                     document.getElementById('incidentCards').innerHTML =
-                        `<div class="text-danger text-center">Error loading data.</div>`;
+                        `<div class="text-danger text-center">Gagal memuat data.</div>`;
                 })
                 .finally(() => {
                     document.getElementById('loading').style.display = 'none';
@@ -167,7 +179,7 @@
             if (current > 1) {
                 pages.push(
                     `<li class="page-item"><button class="page-link" onclick="fetchData(${current - 1})">&laquo;</button></li>`
-                    );
+                );
             }
 
             for (let i = 1; i <= total; i++) {
@@ -185,7 +197,7 @@
             if (current < total) {
                 pages.push(
                     `<li class="page-item"><button class="page-link" onclick="fetchData(${current + 1})">&raquo;</button></li>`
-                    );
+                );
             }
 
             pagination.innerHTML = pages.join('');
@@ -193,12 +205,12 @@
 
         function getStatusLabel(status) {
             const map = {
-                1: 'Open',
-                2: 'In Progress',
-                3: 'Closed',
-                4: 'Pending'
+                1: 'Terbuka',
+                2: 'Dalam Proses',
+                3: 'Selesai',
+                4: 'Tertunda'
             };
-            return map[status] || 'Unknown';
+            return map[status] || 'Tidak Diketahui';
         }
 
         function getStatusColor(status) {
