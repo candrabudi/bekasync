@@ -725,7 +725,7 @@
                 const tr = document.createElement('tr');
                 tr.classList.add('hover:bg-gray-50');
                 tr.innerHTML = `
-                    <td class="py-2 pr-4 max-w-[150px] truncate" title="${item.dinas}">${truncateText(item.dinas, 25)}</td>
+                    <td class="py-2 pr-4 max-w-[150px] truncate" title="${item.dinas}"><a href="/incident/by-dinas/${item.dinas}" target="_blank"> ${truncateText(item.dinas, 25)} </a></td>
                     <td class="py-2 pr-4 text-center font-semibold text-gray-800">${item.total_responses ?? '-'}</td>
                     <td class="py-2 text-center text-gray-600">${formatSeconds(item.avg_response_time_seconds)}</td>
                 `;
