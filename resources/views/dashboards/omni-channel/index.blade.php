@@ -1,17 +1,10 @@
 @extends('layouts.app')
 
 @push('styles')
-    {{-- Ikon --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
-
-    {{-- Daterangepicker CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
-    {{-- Select2 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    {{-- Custom Styles --}}
     <style>
         :root {
             --primary-green: #28a745;
@@ -237,8 +230,6 @@
             padding: 10px;
             margin-bottom: 8px;
             border-radius: 8px;
-            /* background-color: var(--header-bg); */
-            /* border: 1px solid var(--border-color); */
             transition: background-color 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -298,13 +289,13 @@
 
         #agentListContainer {
             max-height: var(--agent-list-max-height);
-            overflow-y: hidden; /* Default to hidden for auto-scroll */
+            overflow-y: hidden; 
             padding-right: 5px;
             position: relative;
         }
 
         #agentListContainer.manual-scroll {
-            overflow-y: auto; /* Enable scrollbar when search is active or hovered */
+            overflow-y: auto;
         }
 
         #agentListContainer::-webkit-scrollbar {
@@ -523,13 +514,11 @@
 
             <div class="col-xl-4 col-md-6 text-md-end text-start">
                 <div class="d-flex align-items-center gap-3 justify-content-end">
-                    {{-- Select2 untuk Channel --}}
                     <select id="channel-select" class="form-select" style="width: 400px;">
                     </select>
 
-                    {{-- Daterangepicker --}}
                     <div id="daterange-display" class="btn btn-outline-secondary d-flex align-items-center gap-2"
-                        style="cursor: pointer;">
+                        style="cursor: pointer; width: 400px; text-align: center;">
                         <i class="ri-calendar-line"></i>
                         <span id="daterange-text"></span>
                     </div>
@@ -537,7 +526,7 @@
             </div>
         </div>
 
-        @include('dashboards.partials.menu') {{-- Asumsi ini adalah partial Blade yang ada --}}
+        @include('dashboards.partials.menu') 
 
         <div class="row">
             <div class="col-md-8">
@@ -578,7 +567,7 @@
                                             class="visually-hidden">Loading...</span></div>
                                 </div>
                                 <div id="wa-usage-content">
-                                    {{-- WhatsApp usage data will be loaded here --}}
+
                                 </div>
                             </div>
                         </div>
@@ -701,7 +690,7 @@
 
                         <div id="agentListContainer">
                             <div class="agent-list-content" id="agent-performance-body">
-                                {{-- Agent list will be loaded here --}}
+
                             </div>
                         </div>
                     </div>
@@ -712,40 +701,28 @@
 @endsection
 
 @push('scripts')
-    {{-- JQuery harus diload sebelum Select2 dan Daterangepicker --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- Select2 JS --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    {{-- Moment.js (dependency for Daterangepicker) --}}
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-    {{-- Daterangepicker JS --}}
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    {{-- Axios (for API calls) --}}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    {{-- Chart.js (for charts) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-    {{-- Bootstrap Bundle JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 
     <script>
-        // Base URL untuk API Anda
         const BASE_API_URL = `${window.location.origin}/sosmed`;
 
-        // Variabel untuk menyimpan instance Chart.js
         let conversationsChartInstance = null;
 
-        // Variabel global untuk menyimpan filter saat ini
         let currentChannel = 'all';
         let currentStartDate = moment().startOf('day').format('YYYY-MM-DD');
         let currentEndDate = moment().endOf('day').format('YYYY-MM-DD');
 
-        // Mengambil CSRF token dari meta tag (penting untuk Laravel)
         const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
             document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
 
-        // Konfigurasi Axios dengan CSRF token
         const customAxios = axios.create({
             baseURL: BASE_API_URL,
             headers: {
@@ -753,11 +730,6 @@
             }
         });
 
-        /**
-         * Menampilkan atau menyembunyikan overlay loading.
-         * @param {string} loaderId ID dari elemen loading-overlay.
-         * @param {boolean} show True untuk menampilkan, false untuk menyembunyikan.
-         */
         function toggleLoading(loaderId, show) {
             const loader = document.getElementById(loaderId);
             if (loader) {
@@ -769,10 +741,6 @@
             }
         }
 
-        /**
-         * Menginisialisasi Date Range Picker.
-         * @param {function} callback Fungsi yang akan dijalankan ketika range tanggal diaplikasikan.
-         */
         function initializeDateRangePicker(callback) {
             const start = moment().startOf('day');
             const end = moment().endOf('day');
@@ -780,7 +748,7 @@
             $('#daterange-display').daterangepicker({
                 startDate: start,
                 endDate: end,
-                opens: 'left', // Posisi dropdown
+                opens: 'left',
                 locale: {
                     format: 'YYYY-MM-DD',
                     applyLabel: "Apply",
@@ -806,60 +774,43 @@
                 }
             }, callback);
 
-            // Update tampilan awal date range
             updateDateRangeDisplay(document.getElementById('daterange-text'), start, end);
         }
 
-        /**
-         * Memperbarui teks tampilan date range.
-         * @param {HTMLElement} element Elemen span untuk menampilkan tanggal.
-         * @param {moment.Moment} start Objek moment untuk tanggal mulai.
-         * @param {moment.Moment} end Objek moment untuk tanggal akhir.
-         */
         function updateDateRangeDisplay(element, start, end) {
             if (element) {
-                // Periksa apakah range adalah satu hari penuh atau periode lain
                 if (start.format('YYYY-MM-DD') === end.format('YYYY-MM-DD')) {
-                    element.textContent = `${start.format('MMM D, YYYY')}`; // Hanya tanggal jika satu hari
+                    element.textContent = `${start.format('MMM D, YYYY')}`;
                 } else {
                     element.textContent = `${start.format('MMM D, YYYY')} - ${end.format('MMM D, YYYY')}`;
                 }
             }
         }
 
-        /**
-         * Mengambil daftar langganan (channels) dan mengisi Select2.
-         */
         async function fetchSubscriptionList() {
             try {
                 const response = await customAxios.post(`${BASE_API_URL}/subscription`);
                 const data = response.data.data;
 
                 const selectEl = $('#channel-select');
-                selectEl.empty(); // Bersihkan opsi yang ada
-
-                // Tambahkan opsi "All Channels"
+                selectEl.empty(); 
                 selectEl.append('<option value="all">All Channels</option>');
 
-                // Tambahkan data channel dari API
                 data.forEach(channel => {
                     selectEl.append(new Option(channel.account_name, channel.id));
                 });
 
-                // Inisialisasi Select2 pada elemen
                 selectEl.select2({
                     placeholder: "Pilih Channel",
-                    allowClear: true // Memungkinkan pengguna untuk menghapus pilihan (kembali ke 'All')
+                    allowClear: true 
                 });
 
-                // Set nilai default dan trigger change agar data dashboard terload
                 selectEl.val('all').trigger('change');
 
-                // Event handler ketika user mengganti channel
                 selectEl.on('change', function() {
                     const selectedValue = $(this).val();
-                    currentChannel = selectedValue; // Perbarui channel yang dipilih
-                    updateAllDashboardData(); // Muat ulang semua data dashboard
+                    currentChannel = selectedValue; 
+                    updateAllDashboardData(); 
                 });
 
             } catch (error) {
@@ -867,16 +818,12 @@
             }
         }
 
-        /**
-         * Mengambil data agent aktif.
-         * @param {string} channel Filter channel.
-         */
         async function fetchActiveAgentsData(channel) {
-            toggleLoading('loading-agent-details', true); // Aktifkan loader
+            toggleLoading('loading-agent-details', true);
             try {
                 const response = await customAxios.post(`${BASE_API_URL}/active-agents`, {
                     channel: channel,
-                    date: [currentStartDate, currentEndDate] // Gunakan date range saat ini
+                    date: [currentStartDate, currentEndDate]
                 });
                 const data = response.data.data;
 
@@ -897,20 +844,13 @@
 
             } catch (error) {
                 console.error('Error fetching active agents data:', error);
-                // Reset to default/error state on failure
                 document.getElementById('agent-online-count').innerText = '0 / 0';
                 document.querySelector('.agent-availability-summary-section .progress-bar').style.width = '0%';
             } finally {
-                toggleLoading('loading-agent-details', false); // Nonaktifkan loader
+                toggleLoading('loading-agent-details', false); 
             }
         }
 
-        /**
-         * Mengambil ringkasan percakapan (total, unassigned, active, completed, dll.).
-         * @param {string} channel Filter channel.
-         * @param {string} startDate Tanggal mulai (YYYY-MM-DD).
-         * @param {string} endDate Tanggal akhir (YYYY-MM-DD).
-         */
         async function fetchConversationsSummary(channel, startDate, endDate) {
             toggleLoading('loading-total-conversations', true);
             toggleLoading('loading-response-time', true);
@@ -923,7 +863,6 @@
                 });
                 const data = response.data.data;
 
-                // Update Total Percakapan
                 document.getElementById('total-conversations-value').innerText = (data.conversations_status
                     .unassigned || 0) + (data.conversations_status.active || 0) + (data.conversations_status
                     .completed || 0) || '0';
@@ -931,24 +870,20 @@
                 document.getElementById('active-value').innerText = data.conversations_status.active || '0';
                 document.getElementById('completed-value').innerText = data.conversations_status.completed || '0';
 
-                // Update Rata-rata Waktu Respon
                 document.getElementById('avg-1st-reply-time').innerText = data.avg_1st_reply_time || '00:00:00';
                 document.getElementById('avg-reply-time').innerText = data.avg_reply_time || '00:00:00';
                 document.getElementById('avg-duration-time').innerText = data.avg_duration_time || '00:00:00';
 
-                // Update Kepuasan Pelanggan (CSAT)
                 const csatValue = typeof data.avg_csat === 'number' && !isNaN(data.avg_csat) ? data.avg_csat.toFixed(
                     2) : '0.00';
                 document.getElementById('avg-csat').innerText = csatValue;
                 document.querySelector('.satisfaction-note').innerText = data.avg_csat_note || '(belum ada data)';
 
-                // Update Total Percakapan Harian untuk chart
                 const totalHourlyConversations = data.conversations_data.chart_data.datasets.conversations.reduce((sum,
                     value) => sum + value, 0);
                 document.getElementById('hourly-total-conversations').innerText =
                     `Total: ${totalHourlyConversations} conversations`;
 
-                // Perbarui Chart Aktivitas Percakapan
                 updateConversationsChart(
                     data.conversations_data.chart_data.labels,
                     data.conversations_data.chart_data.datasets.inbound_conversations || [],
@@ -958,7 +893,6 @@
 
             } catch (error) {
                 console.error('Error fetching conversations summary data:', error);
-                // Setel nilai ke '0' atau pesan error jika terjadi kegagalan
                 document.getElementById('total-conversations-value').innerText = '0';
                 document.getElementById('unassigned-value').innerText = '0';
                 document.getElementById('active-value').innerText = '0';
@@ -978,33 +912,25 @@
             }
         }
 
-        /**
-         * Memperbarui atau membuat ulang chart aktivitas percakapan.
-         * @param {string[]} labels Label sumbu X (misal: jam).
-         * @param {number[]} inboundData Data percakapan masuk.
-         * @param {number[]} outboundData Data percakapan keluar.
-         * @param {number[]} allData Data total percakapan.
-         */
         function updateConversationsChart(labels, inboundData, outboundData, allData) {
             const canvas = document.getElementById('conversationsChart');
             if (!canvas) return;
 
             const ctx = canvas.getContext('2d');
             if (conversationsChartInstance) {
-                conversationsChartInstance.destroy(); // Hancurkan instance chart yang ada
+                conversationsChartInstance.destroy();
             }
 
-            // Definisikan gradient untuk area chart
             const inboundGradient = ctx.createLinearGradient(0, 0, 0, 300);
-            inboundGradient.addColorStop(0, 'rgba(74, 144, 226, 0.7)'); // Biru
+            inboundGradient.addColorStop(0, 'rgba(74, 144, 226, 0.7)'); 
             inboundGradient.addColorStop(1, 'rgba(74, 144, 226, 0.2)');
 
             const outboundGradient = ctx.createLinearGradient(0, 0, 0, 300);
-            outboundGradient.addColorStop(0, 'rgba(46, 204, 113, 0.7)'); // Hijau
+            outboundGradient.addColorStop(0, 'rgba(46, 204, 113, 0.7)'); 
             outboundGradient.addColorStop(1, 'rgba(46, 204, 113, 0.2)');
 
             const allGradient = ctx.createLinearGradient(0, 0, 0, 300);
-            allGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); // Orange
+            allGradient.addColorStop(0, 'rgba(255, 165, 0, 0.7)'); 
             allGradient.addColorStop(1, 'rgba(255, 165, 0, 0.2)');
 
             conversationsChartInstance = new Chart(ctx, {
@@ -1057,7 +983,7 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: false // Sembunyikan legend bawaan karena kita membuat kontrol sendiri
+                            display: false 
                         },
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.85)',
@@ -1079,7 +1005,7 @@
                             ticks: {
                                 color: 'var(--muted-text-color)',
                                 autoSkip: true,
-                                maxTicksLimit: 10 // Batasi jumlah tick pada sumbu X
+                                maxTicksLimit: 10 
                             },
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.05)',
@@ -1091,7 +1017,7 @@
                             ticks: {
                                 color: 'var(--muted-text-color)',
                                 stepSize: 1,
-                                precision: 0 // Pastikan nilai Y adalah integer
+                                precision: 0
                             },
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.05)',
@@ -1102,16 +1028,12 @@
                 }
             });
 
-            // Tambahkan event listener untuk checkbox filter chart
             document.querySelectorAll('.activity-chart-card .form-check-input').forEach(checkbox => {
-                checkbox.removeEventListener('change', handleChartCheckboxChange); // Hapus listener lama
-                checkbox.addEventListener('change', handleChartCheckboxChange); // Tambahkan listener baru
+                checkbox.removeEventListener('change', handleChartCheckboxChange); 
+                checkbox.addEventListener('change', handleChartCheckboxChange); 
             });
         }
 
-        /**
-         * Handler untuk perubahan checkbox filter chart.
-         */
         function handleChartCheckboxChange() {
             if (!conversationsChartInstance) return;
 
@@ -1131,12 +1053,6 @@
             conversationsChartInstance.update();
         }
 
-        /**
-         * Mengambil data penggunaan WhatsApp.
-         * @param {string} channel Filter channel.
-         * @param {string} startDate Tanggal mulai (YYYY-MM-DD).
-         * @param {string} endDate Tanggal akhir (YYYY-MM-DD).
-         */
         async function fetchWhatsAppUsage(channel, startDate, endDate) {
             toggleLoading('loading-whatsapp-conversations', true);
             try {
@@ -1149,9 +1065,7 @@
                 const container = document.getElementById("wa-usage-content");
                 if (!container) return;
 
-                container.innerHTML = ''; // Bersihkan konten sebelumnya
-
-                // Mapping untuk kategori dan ikon
+                container.innerHTML = ''; 
                 const usageItemsMap = {
                     utility: {
                         label: "Utility",
@@ -1179,12 +1093,12 @@
                     }
                 };
 
-                const sortedKeys = Object.keys(usageItemsMap).sort(); // Urutkan key secara alfabetis
+                const sortedKeys = Object.keys(usageItemsMap).sort(); 
                 let hasData = false;
                 sortedKeys.forEach(key => {
                     const itemProps = usageItemsMap[key];
                     const value = data[key] || 0;
-                    if (value > 0) hasData = true; // Setel true jika ada data yang > 0
+                    if (value > 0) hasData = true; 
 
                     container.innerHTML += `
                         <div class="whatsapp-list-item">
@@ -1211,29 +1125,21 @@
             }
         }
 
-        // Variabel untuk auto-scroll agent list
         let agentScrollInterval;
-        const agentScrollSpeed = 0.5; // Kecepatan scroll (px per interval)
-        const agentIntervalTime = 20; // Interval waktu (ms)
-        let originalAgentContentHeight = 0; // Tinggi konten agen yang sebenarnya
+        const agentScrollSpeed = 0.5;
+        const agentIntervalTime = 20; 
+        let originalAgentContentHeight = 0;
 
         const agentListContainer = document.getElementById('agentListContainer');
         const agentListContent = document.getElementById('agent-performance-body');
 
-        /**
-         * Menginisialisasi auto-scroll untuk daftar agen.
-         * Ini akan menduplikasi konten jika diperlukan untuk efek gulir tanpa henti.
-         */
         function initializeAgentScrolling() {
-            stopAgentScrolling(); // Pastikan interval sebelumnya berhenti
-
+            stopAgentScrolling();
             const allAgentCards = agentListContent.querySelectorAll('.operator-card');
-            // Filter hanya kartu yang ditampilkan (tidak display:none) untuk perhitungan tinggi
             const visibleAgentCards = Array.from(allAgentCards).filter(card => card.style.display !== 'none');
 
             const originalChildrenHtml = visibleAgentCards.map(child => child.outerHTML).join('');
 
-            // Jika tidak ada data agen atau semua tersembunyi
             if (originalChildrenHtml.trim() === '' || visibleAgentCards.length === 0) {
                 agentListContent.innerHTML =
                     `<div class="operator-card text-center text-muted-text-color" style="padding: 20px;">Tidak ada data agen untuk ditampilkan.</div>`;
@@ -1241,59 +1147,43 @@
                 return;
             }
 
-            // Hitung tinggi konten asli
             const tempMeasureDiv = document.createElement('div');
             tempMeasureDiv.style.visibility = 'hidden';
             tempMeasureDiv.style.position = 'absolute';
             tempMeasureDiv.style.top = '-9999px';
-            tempMeasureDiv.style.width = agentListContent.offsetWidth + 'px'; // Penting untuk mempertahankan lebar
+            tempMeasureDiv.style.width = agentListContent.offsetWidth + 'px';
             tempMeasureDiv.innerHTML = originalChildrenHtml;
             document.body.appendChild(tempMeasureDiv);
             originalAgentContentHeight = tempMeasureDiv.offsetHeight;
             document.body.removeChild(tempMeasureDiv);
 
-            agentListContent.innerHTML = ''; // Bersihkan konten
+            agentListContent.innerHTML = ''; 
 
-            // Duplikasi konten agar bisa scroll looping
             const numDuplicates = Math.ceil((agentListContainer.offsetHeight * 2) / originalAgentContentHeight) + 1;
             for (let i = 0; i < numDuplicates; i++) {
                 agentListContent.innerHTML += originalChildrenHtml;
             }
 
-            agentListContainer.scrollTop = 0; // Setel ke atas
-            startAgentScrolling(); // Mulai gulir
+            agentListContainer.scrollTop = 0; 
+            startAgentScrolling();
         }
 
-        /**
-         * Memulai auto-scroll untuk daftar agen.
-         */
         function startAgentScrolling() {
-            stopAgentScrolling(); // Hentikan yang sebelumnya jika ada
-            agentListContainer.classList.remove('manual-scroll'); // Sembunyikan scrollbar bawaan
+            stopAgentScrolling();
+            agentListContainer.classList.remove('manual-scroll'); 
             agentScrollInterval = setInterval(() => {
                 agentListContainer.scrollTop += agentScrollSpeed;
-                // Jika sudah mencapai akhir konten asli (duplikasi pertama), reset ke awal
                 if (agentListContainer.scrollTop >= originalAgentContentHeight) {
                     agentListContainer.scrollTop = 0;
                 }
             }, agentIntervalTime);
         }
 
-        /**
-         * Menghentikan auto-scroll untuk daftar agen dan mengaktifkan scroll manual.
-         */
         function stopAgentScrolling() {
-            clearInterval(agentScrollInterval); // Hentikan interval
-            agentListContainer.classList.add('manual-scroll'); // Tampilkan scrollbar bawaan
+            clearInterval(agentScrollInterval);
+            agentListContainer.classList.add('manual-scroll'); 
         }
 
-
-        /**
-         * Mengambil data kinerja agen.
-         * @param {string} channel Filter channel.
-         * @param {string} startDate Tanggal mulai (YYYY-MM-DD).
-         * @param {string} endDate Tanggal akhir (YYYY-MM-DD).
-         */
         async function fetchAgentPerformance(channel, startDate, endDate) {
             toggleLoading('loading-agent-details', true);
             try {
@@ -1336,9 +1226,8 @@
                     });
                 }
 
-                agentListContent.innerHTML = agentCardsHtml; // Update konten daftar agen
+                agentListContent.innerHTML = agentCardsHtml;
 
-                // Re-initialize scrolling after updating content
                 initializeAgentScrolling();
 
             } catch (error) {
@@ -1352,12 +1241,6 @@
             }
         }
 
-        /**
-         * Mengambil data top tags.
-         * @param {string} channel Filter channel.
-         * @param {string} startDate Tanggal mulai (YYYY-MM-DD).
-         * @param {string} endDate Tanggal akhir (YYYY-MM-DD).
-         */
         async function fetchTopTags(channel, startDate, endDate) {
             toggleLoading('loading-top-tags', true);
             try {
@@ -1369,9 +1252,9 @@
                 const topTagsContent = document.getElementById('top-tags-content');
 
                 if (topTagsContent) {
-                    topTagsContent.innerHTML = ''; // Bersihkan konten sebelumnya
+                    topTagsContent.innerHTML = ''; 
                     if (data && data.length > 0) {
-                        data.slice(0, 5).forEach(tag => { // Ambil hanya 5 teratas
+                        data.slice(0, 5).forEach(tag => { 
                             topTagsContent.innerHTML += `
                                 <div class="d-flex justify-content-between align-items-center p-3 rounded-lg">
                                     <div class="d-flex align-items-center gap-2">
@@ -1397,18 +1280,12 @@
             }
         }
 
-        /**
-         * Fungsi utama untuk memperbarui semua data di dashboard.
-         * Dipanggil setiap kali filter (channel atau tanggal) berubah.
-         */
         function updateAllDashboardData() {
             const momentStart = moment(currentStartDate);
             const momentEnd = moment(currentEndDate);
 
-            // Perbarui tampilan tanggal di UI
             updateDateRangeDisplay(document.getElementById('daterange-text'), momentStart, momentEnd);
 
-            // Panggil semua fungsi fetch data dengan filter terbaru
             fetchActiveAgentsData(currentChannel);
             fetchConversationsSummary(currentChannel, currentStartDate, currentEndDate);
             fetchWhatsAppUsage(currentChannel, currentStartDate, currentEndDate);
@@ -1416,43 +1293,35 @@
             fetchTopTags(currentChannel, currentStartDate, currentEndDate);
         }
 
-        // --- DOMContentLoaded dan Event Listeners ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi untuk memperbarui waktu saat ini di header (jika ada elemennya)
             function updateCurrentTime() {
                 const now = moment();
-                const dateTimeHeader = document.getElementById('current-date-time'); // Pastikan ada elemen ini di HTML jika ingin menampilkannya
+                const dateTimeHeader = document.getElementById('current-date-time');
                 if (dateTimeHeader) {
                     dateTimeHeader.textContent = now.format('dddd, DD/MM/YYYY - HH:mm:ss');
                 }
             }
-            setInterval(updateCurrentTime, 1000); // Perbarui setiap detik
-            updateCurrentTime(); // Panggil sekali saat dimuat
-
-            // Inisialisasi Select2 dan Date Range Picker, lalu muat data dashboard
+            setInterval(updateCurrentTime, 1000);
+            updateCurrentTime();
             fetchSubscriptionList().then(() => {
                 initializeDateRangePicker(function(start, end) {
                     currentStartDate = start.format('YYYY-MM-DD');
                     currentEndDate = end.format('YYYY-MM-DD');
-                    updateAllDashboardData(); // Panggil saat tanggal berubah
+                    updateAllDashboardData();
                 });
 
-                // Panggil updateAllDashboardData() untuk pertama kali setelah Select2 dan Date Range Picker siap
                 updateAllDashboardData();
             });
 
-            // Event listener untuk input pencarian agen
             const agentSearchInput = document.getElementById('agentSearchInput');
             agentSearchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase().trim();
-                // QuerySelectorAll akan mencari di seluruh turunan agentListContent
                 const allAgentCardsInContent = agentListContent.querySelectorAll('.operator-card');
 
                 if (searchTerm !== '') {
-                    stopAgentScrolling(); // Hentikan auto-scroll saat mencari
-                    agentListContainer.scrollTop = 0; // Reset scroll saat mencari
+                    stopAgentScrolling();
+                    agentListContainer.scrollTop = 0; 
                 } else {
-                    // Hanya mulai auto-scroll jika tidak ada hover pada container
                     if (!agentListContainer.matches(':hover')) {
                         startAgentScrolling();
                     }
@@ -1464,35 +1333,29 @@
                     const agentEmail = card.dataset.email ? card.dataset.email.toLowerCase() : '';
 
                     if (agentName.includes(searchTerm) || agentEmail.includes(searchTerm)) {
-                        card.style.display = 'block'; // Tampilkan kartu
+                        card.style.display = 'block';
                         hasVisibleResults = true;
                     } else {
-                        card.style.display = 'none'; // Sembunyikan kartu
+                        card.style.display = 'none'; 
                     }
                 });
 
-                // Jika tidak ada hasil pencarian, tampilkan pesan
                 if (!hasVisibleResults && searchTerm !== '') {
                     agentListContent.innerHTML = `<div class="operator-card text-center text-muted-text-color" style="padding: 20px;">Tidak ada agen yang cocok dengan pencarian Anda.</div>`;
                 } else if (searchTerm === '' && agentListContent.children.length === 1 && agentListContent.children[0].textContent.includes('Tidak ada agen yang cocok')) {
-                    // Jika pencarian dikosongkan dan sebelumnya ada pesan "tidak cocok", muat ulang agen asli
                     fetchAgentPerformance(currentChannel, currentStartDate, currentEndDate);
                 } else if (!hasVisibleResults && searchTerm === '') {
-                     // Ini mungkin terjadi jika awalnya memang tidak ada data agen
                      agentListContent.innerHTML = `<div class="operator-card text-center text-muted-text-color" style="padding: 20px;">Tidak ada data agen.</div>`;
                 }
 
-                // Setelah filter, jika tidak sedang mencari, inisialisasi ulang scroll untuk memastikan konten duplikasi benar.
                 if (searchTerm === '') {
                     initializeAgentScrolling();
                 }
             });
 
 
-            // Event listener untuk menghentikan/melanjutkan auto-scroll saat hover
             agentListContainer.addEventListener('mouseenter', stopAgentScrolling);
             agentListContainer.addEventListener('mouseleave', function() {
-                // Lanjutkan auto-scroll hanya jika input pencarian kosong
                 if (document.getElementById('agentSearchInput').value.trim() === '') {
                     startAgentScrolling();
                 }

@@ -53,6 +53,9 @@ Route::prefix('dispatchers')->name('dispatchers.')->group(function () {
 Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
 Route::get('/incidents/data', [IncidentController::class, 'fetch'])->name('incidents.fetch');
 Route::get('/incidents/{id}', [IncidentController::class, 'show'])->name('incidents.show');
+Route::get('/incident/by-dinas/{a}', [IncidentController::class, 'showByDinas']);
+Route::get('/incident/by-dinas/{a}/list', [IncidentController::class, 'getReportsByDinas']);
+
 
 Route::get('/government-units', [GovernmentUnitController::class, 'index'])->name('government_units.index');
 Route::get('/government-units/data', [GovernmentUnitController::class, 'data'])->name('government_units.data');

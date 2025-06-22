@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\IncidentReport;
 use App\Models\AgencyResponse;
 use App\Models\IncidentLog;
+use Illuminate\Support\Facades\DB;
 
 class IncidentController extends Controller
 {
-    /**
-     * Halaman utama list incident
-     */
     public function index(Request $request)
     {
         return view('incidents.index', [
@@ -21,14 +19,10 @@ class IncidentController extends Controller
         ]);
     }
 
-    /**
-     * Fetch data via AJAX (dengan filter & pagination)
-     */
     public function fetch(Request $request)
     {
         $query = IncidentReport::query();
 
-        // Search
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('ticket', 'like', "%{$request->search}%")
@@ -37,7 +31,6 @@ class IncidentController extends Controller
             });
         }
 
-        // Filters
         if ($request->start_date) {
             $query->whereDate('incident_created_at', '>=', $request->start_date);
         }
@@ -67,21 +60,92 @@ class IncidentController extends Controller
         );
     }
 
-    /**
-     * Tampilkan detail 1 incident report
-     */
     public function show($id)
     {
         $incident = IncidentReport::findOrFail($id);
 
-        // Ambil respons dari dinas terkait
         $agencyResponses = AgencyResponse::where('incident_report_id', $id)->get();
 
-        // Ambil log perubahan status
         $logs = IncidentLog::where('incident_report_id', $id)
             ->orderByDesc('created_at')
             ->get();
 
         return view('incidents.show', compact('incident', 'agencyResponses', 'logs'));
+    }
+
+    public function showByDinas($a)
+    {
+        $categories = DB::table('incident_reports')->distinct()->pluck('category')->filter();
+        $districts = DB::table('incident_reports')->distinct()->pluck('district')->filter();
+        $subdistricts = DB::table('incident_reports')->distinct()->pluck('subdistrict')->filter();
+
+        return view('incidents.incident_opd', compact('categories', 'districts', 'subdistricts'));
+    }
+
+    public function getReportsByDinas(Request $request, $a)
+    {
+        $query = DB::table('incident_reports')
+            ->join('agency_responses', 'incident_reports.id', '=', 'agency_responses.incident_report_id')
+            ->where('agency_responses.dinas', $a)
+            ->select(
+                'incident_reports.id',
+                'incident_reports.ticket',
+                'incident_reports.category',
+                'incident_reports.status',
+                'incident_reports.phone',
+                'incident_reports.caller',
+                'incident_reports.location',
+                'incident_reports.district',
+                'incident_reports.subdistrict',
+                'incident_reports.call_type',
+                'incident_reports.channel_id',
+                'incident_reports.created_at as incident_created_at',
+                'agency_responses.dinas as opd_name'
+            );
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('incident_reports.ticket', 'like', "%$search%")
+                    ->orWhere('incident_reports.phone', 'like', "%$search%")
+                    ->orWhere('incident_reports.caller', 'like', "%$search%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->where('incident_reports.category', $request->category);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('incident_reports.status', $request->status);
+        }
+
+        if ($request->filled('district')) {
+            $query->where('incident_reports.district', $request->district);
+        }
+
+        if ($request->filled('subdistrict')) {
+            $query->where('incident_reports.subdistrict', $request->subdistrict);
+        }
+
+        if ($request->filled('call_type')) {
+            $query->where('incident_reports.call_type', $request->call_type);
+        }
+
+        if ($request->filled('channel_id')) {
+            $query->where('incident_reports.channel_id', $request->channel_id);
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('incident_reports.created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('incident_reports.created_at', '<=', $request->end_date);
+        }
+
+        $reports = $query->orderBy('incident_reports.created_at', 'desc')->paginate(9);
+
+        return response()->json($reports);
     }
 }

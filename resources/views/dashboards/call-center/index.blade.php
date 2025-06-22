@@ -427,7 +427,7 @@
                                         <a href="#" class="text-dark fw-bold text-decoration-none">Baru</a>
                                         <div class="text-muted small">Data Insiden Baru</div>
                                     </div>
-                                    <span id="statusBaru" class="fw-bold fs-5 text-dark">0</span>
+                                    <span id="statusBaruTop" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
                         </div>
@@ -442,7 +442,7 @@
                                         <a href="#" class="text-dark fw-bold text-decoration-none">Proses</a>
                                         <div class="text-muted small">Data Insiden Proses</div>
                                     </div>
-                                    <span id="statusDiproses" class="fw-bold fs-5 text-dark">0</span>
+                                    <span id="statusDiprosesTop" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
                         </div>
@@ -457,7 +457,7 @@
                                         <a href="#" class="text-dark fw-bold text-decoration-none">Selesai</a>
                                         <div class="text-muted small">Data Insiden Selesai</div>
                                     </div>
-                                    <span id="statusSelesai" class="fw-bold fs-5 text-dark">0</span>
+                                    <span id="statusSelesaiTop" class="fw-bold fs-5 text-dark">0</span>
                                 </div>
                             </div>
                         </div>
@@ -705,11 +705,13 @@
                 const totalData = Number(item.total);
 
                 tr.innerHTML = `
-            <td class="py-2 pr-4 max-w-[160px] truncate" title="${item.dinas}">${truncateText(item.dinas, 30)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalData}">${totalData}</td>
-            <td class="py-2 pr-4 text-center text-gray-600">${item.selesai_count}</td>
-            <td class="py-2 text-center text-gray-600">${item.proses_count}</td>
-        `;
+                    <td class="py-2 pr-4 max-w-[160px] truncate" title="${item.dinas}">
+                        <a href="/incident/by-dinas/${item.dinas}" target="_blank"> ${truncateText(item.dinas, 30)} </a>
+                    </td>
+                    <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalData}">${totalData}</td>
+                    <td class="py-2 pr-4 text-center text-gray-600">${item.selesai_count}</td>
+                    <td class="py-2 text-center text-gray-600">${item.proses_count}</td>
+                `;
                 list.appendChild(tr);
             });
         }
@@ -723,10 +725,10 @@
                 const tr = document.createElement('tr');
                 tr.classList.add('hover:bg-gray-50');
                 tr.innerHTML = `
-        <td class="py-2 pr-4 max-w-[150px] truncate" title="${item.dinas}">${truncateText(item.dinas, 25)}</td>
-        <td class="py-2 pr-4 text-center font-semibold text-gray-800">${item.total_responses ?? '-'}</td>
-        <td class="py-2 text-center text-gray-600">${formatSeconds(item.avg_response_time_seconds)}</td>
-      `;
+                    <td class="py-2 pr-4 max-w-[150px] truncate" title="${item.dinas}">${truncateText(item.dinas, 25)}</td>
+                    <td class="py-2 pr-4 text-center font-semibold text-gray-800">${item.total_responses ?? '-'}</td>
+                    <td class="py-2 text-center text-gray-600">${formatSeconds(item.avg_response_time_seconds)}</td>
+                `;
                 tbody.appendChild(tr);
             });
         }
@@ -815,23 +817,24 @@
                     params
                 });
                 const laporan = response.data.data?.type_laporan || {};
-                renderTotalTypeReport(laporan); // panggil render di sini
+                const show = response.data.data;
+                renderTotalTypeReport(laporan, show);
             } catch (err) {
                 console.error('Gagal fetch data total tipe laporan:', err);
             }
         }
 
-        function renderTotalTypeReport(data) {
+        function renderTotalTypeReport(data, show) {
             const container = document.getElementById('total-type-report-container');
             container.innerHTML = '';
 
             const totalText = document.createElement('div');
             totalText.className = 'mb-3';
             totalText.innerHTML = `
-        <p class="fs-5 fw-semibold text-muted mb-2">Total Semua Laporan:
-            <span class="fw-bold text-dark">${data.total || 0}</span>
-        </p>
-    `;
+                <p class="fs-5 fw-semibold text-muted mb-2">Total Semua Laporan:
+                    <span class="fw-bold text-dark">${data.total || 0}</span>
+                </p>
+            `;
             container.appendChild(totalText);
 
             const grid = document.createElement('div');
@@ -878,6 +881,15 @@
                 `;
                 grid.appendChild(div);
             });
+
+            function updateValue(id, value) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            }
+
+            updateValue('statusBaruTop', show.active);
+            updateValue('statusDiprosesTop', show.handling);
+            updateValue('statusSelesaiTop', show.closed);
 
             container.appendChild(grid);
         }

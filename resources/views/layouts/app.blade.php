@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }} ">
     <link rel="stylesheet" href="{{ asset('assets/css/style_new.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/toastr.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.min.css" rel="stylesheet">
     @stack('styles')
 </head>
 
