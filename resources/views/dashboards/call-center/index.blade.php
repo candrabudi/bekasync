@@ -516,7 +516,7 @@
                                     <tr>
                                         <th class="py-2 pr-4 font-medium max-w-[150px]">Dinas</th>
                                         <th class="py-2 pr-4 font-medium text-center">Total Response</th>
-                                        <th class="py-2 font-medium text-center">AVG Response (second)</th>
+                                        <th class="py-2 font-medium text-center">AVG Response (minute)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="top5-responsive-dinas-list" class="divide-y divide-gray-100">
@@ -717,6 +717,10 @@
         }
 
 
+        function formatMinutes(minutes) {
+            if (!minutes || isNaN(minutes)) return '-';
+            return `${parseFloat(minutes).toFixed(2)} menit`;
+        }
         function renderTop5ResponsiveDinas(data) {
             const tbody = document.getElementById('top5-responsive-dinas-list');
             tbody.innerHTML = '';
@@ -727,7 +731,7 @@
                 tr.innerHTML = `
                     <td class="py-2 pr-4 max-w-[150px] truncate" title="${item.dinas}"><a href="/incident/by-dinas/${item.dinas}" target="_blank"> ${truncateText(item.dinas, 25)} </a></td>
                     <td class="py-2 pr-4 text-center font-semibold text-gray-800">${item.total_responses ?? '-'}</td>
-                    <td class="py-2 text-center text-gray-600">${formatSeconds(item.avg_response_time_seconds)}</td>
+                    <td class="py-2 text-center text-gray-600">${formatMinutes(item.avg_response_time_minutes)}</td>
                 `;
                 tbody.appendChild(tr);
             });

@@ -251,30 +251,30 @@ class DashboardCallCenterController extends Controller
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $query = DB::table('incident_reports')
+        $query = DB::table('incident_reports as ir')
             ->select(
-                'category',
-                DB::raw("SUM(CASE WHEN incident_reports.status IN (2, 3) THEN 1 ELSE 0 END) as total"),
-                DB::raw("SUM(CASE WHEN incident_reports.status = '3' THEN 1 ELSE 0 END) as selesai_count"),
-                DB::raw("SUM(CASE WHEN incident_reports.status = '2' THEN 1 ELSE 0 END) as proses_count")
+                'ir.category',
+                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN ir.status = 2 THEN 1 ELSE 0 END) as selesai_count"),
+                DB::raw("SUM(CASE WHEN ir.status = 3 THEN 1 ELSE 0 END) as proses_count")
             )
-            ->whereNotNull('category')
-            ->where('category', '!=', '-')
-            ->whereDate('incident_reports.created_at', '>=', $start)
-            ->whereDate('incident_reports.created_at', '<=', $end);
+            ->whereNotNull('ir.category')
+            ->where('ir.category', '!=', '-')
+            ->whereBetween('ir.created_at', [$start, $end]);
 
         if ($user->role === 'agency') {
-            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
-                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
+            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'ir.id')
+                ->where('ar.dinas', $user->detail->governmentUnit->name);
         }
 
-        $data = $query->groupBy('category')
+        $data = $query->groupBy('ir.category')
             ->orderByDesc('total')
             ->limit(5)
             ->get();
 
         return response()->json($data);
     }
+
 
     public function getTop5IncidentByDistrict(Request $request)
     {
@@ -285,30 +285,32 @@ class DashboardCallCenterController extends Controller
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $query = DB::table('incident_reports')
+        $query = DB::table('incident_reports as ir')
             ->select(
-                'district',
-                DB::raw("SUM(CASE WHEN incident_reports.status IN (2, 3) THEN 1 ELSE 0 END) as total"),
-                DB::raw("SUM(CASE WHEN incident_reports.status = '2' THEN 1 ELSE 0 END) as selesai_count"),
-                DB::raw("SUM(CASE WHEN incident_reports.status = '3' THEN 1 ELSE 0 END) as proses_count")
+                'ir.district',
+                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN ir.status = 2 THEN 1 ELSE 0 END) as selesai_count"),
+                DB::raw("SUM(CASE WHEN ir.status = 3 THEN 1 ELSE 0 END) as proses_count")
             )
-            ->whereNotNull('district')
-            ->where('district', '!=', '-')
-            ->whereDate('incident_reports.created_at', '>=', $start)
-            ->whereDate('incident_reports.created_at', '<=', $end);
+            ->whereNotNull('ir.district')
+            ->where('ir.district', '!=', '-')
+            ->whereBetween('ir.created_at', [$start, $end]);
 
         if ($user->role === 'agency') {
-            $query->join('agency_responses', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
-                ->where('agency_responses.dinas', $user->detail->governmentUnit->name);
+            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'ir.id')
+                ->where('ar.dinas', $user->detail->governmentUnit->name);
         }
 
-        $data = $query->groupBy('district')
+        $data = $query
+            ->groupBy('ir.district')
             ->orderByDesc('total')
             ->limit(5)
             ->get();
 
         return response()->json($data);
     }
+
+
     public function getTop5IncidentByDinas(Request $request)
     {
         $startDate = $request->input('start_date') ?? Carbon::today()->toDateString();
@@ -317,19 +319,18 @@ class DashboardCallCenterController extends Controller
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $data = DB::table('agency_responses')
-            ->join('incident_reports', 'agency_responses.incident_report_id', '=', 'incident_reports.id')
+        $data = DB::table('agency_responses as ar')
+            ->join('incident_reports as ir', 'ar.incident_report_id', '=', 'ir.id')
             ->select(
-                'agency_responses.dinas',
-                DB::raw("SUM(CASE WHEN agency_responses.status IN (2, 3) THEN 1 ELSE 0 END) as total"),
-                DB::raw("SUM(CASE WHEN agency_responses.status = 2 THEN 1 ELSE 0 END) as selesai_count"),
-                DB::raw("SUM(CASE WHEN agency_responses.status = 3 THEN 1 ELSE 0 END) as proses_count")
+                'ar.dinas',
+                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN ar.status = 2 THEN 1 ELSE 0 END) as selesai_count"),
+                DB::raw("SUM(CASE WHEN ar.status = 3 THEN 1 ELSE 0 END) as proses_count")
             )
-            ->whereNotNull('agency_responses.dinas')
-            ->where('agency_responses.dinas', '!=', '-')
-            ->whereDate('incident_reports.created_at', '>=', $start)
-            ->whereDate('incident_reports.created_at', '<=', $end)
-            ->groupBy('agency_responses.dinas')
+            ->whereNotNull('ar.dinas')
+            ->where('ar.dinas', '!=', '-')
+            ->whereBetween('ir.created_at', [$start, $end])
+            ->groupBy('ar.dinas')
             ->orderByDesc('total')
             ->limit(5)
             ->get();
@@ -345,28 +346,52 @@ class DashboardCallCenterController extends Controller
         $start = Carbon::parse($startDate)->startOfDay();
         $end = Carbon::parse($endDate)->endOfDay();
 
-        $firstResponseSubquery = DB::table('agency_responses as ar1')
-            ->select('ar1.incident_report_id', 'ar1.dinas', DB::raw('MIN(ar1.created_at) as first_response_at'))
-            ->groupBy('ar1.incident_report_id', 'ar1.dinas');
+        // Subquery: Ambil waktu respon pertama dari incident_logs
+        $firstLogSubquery = DB::table('incident_logs as il')
+            ->select(
+                'il.incident_report_id',
+                'il.created_by_name',
+                DB::raw('MIN(il.created_at) as first_response_at')
+            )
+            ->whereNotNull('il.created_by_name')
+            ->whereBetween('il.created_at', [$start, $end])
+            ->groupBy('il.incident_report_id', 'il.created_by_name');
 
-        $data = DB::table(DB::raw("({$firstResponseSubquery->toSql()}) as first_responses"))
-            ->mergeBindings($firstResponseSubquery)
-            ->join('incident_reports as ir', 'first_responses.incident_report_id', '=', 'ir.id')
+        // Join dengan agency_responses berdasarkan incident_report_id dan dinas
+        $firstResponseSubquery = DB::table('agency_responses as ar')
+            ->joinSub($firstLogSubquery, 'logs', function ($join) {
+                $join->on('ar.incident_report_id', '=', 'logs.incident_report_id')
+                    ->on('ar.dinas', '=', 'logs.created_by_name');
+            })
+            ->select(
+                'ar.incident_report_id',
+                'ar.dinas',
+                'logs.first_response_at'
+            )
+            ->whereNotNull('ar.dinas')
+            ->where('ar.dinas', '!=', '-')
+            ->groupBy('ar.incident_report_id', 'ar.dinas', 'logs.first_response_at');
+
+        // Query utama dengan konversi detik ke menit
+        $data = DB::table('incident_reports as ir')
+            ->joinSub($firstResponseSubquery, 'first_responses', function ($join) {
+                $join->on('first_responses.incident_report_id', '=', 'ir.id');
+            })
+            ->whereBetween('ir.created_at', [$start, $end])
+            ->whereNotNull('ir.created_at')
             ->select(
                 'first_responses.dinas',
                 DB::raw('COUNT(*) as total_responses'),
-                DB::raw('AVG(TIMESTAMPDIFF(SECOND, ir.created_at, first_responses.first_response_at)) as avg_response_time_seconds')
+                DB::raw('ROUND(AVG(TIMESTAMPDIFF(SECOND, ir.created_at, first_responses.first_response_at) / 60), 2) as avg_response_time_minutes')
             )
-            ->whereNotNull('first_responses.dinas')
-            ->where('first_responses.dinas', '!=', '-')
-            ->whereBetween('ir.created_at', [$start, $end])
             ->groupBy('first_responses.dinas')
-            ->orderBy('avg_response_time_seconds', 'asc')
+            ->orderBy('avg_response_time_minutes', 'asc')
             ->limit(5)
             ->get();
 
         return response()->json($data);
     }
+
 
 
     public function hourlyStats(Request $request)
