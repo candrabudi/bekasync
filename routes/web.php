@@ -69,6 +69,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/government-units', [GovernmentUnitController::class, 'index'])->name('government_units.index');
     Route::get('/government-units/data', [GovernmentUnitController::class, 'data'])->name('government_units.data');
+    // Tambahan untuk Create, Update, Delete
+    Route::post('/government-units', [GovernmentUnitController::class, 'store'])->name('government_units.store');
+    Route::put('/government-units/{governmentUnit}', [GovernmentUnitController::class, 'update'])->name('government_units.update');
+    Route::delete('/government-units/{governmentUnit}', [GovernmentUnitController::class, 'destroy'])->name('government_units.destroy');
+
 
     Route::get('/agencies', [UserGovermentController::class, 'index'])->name('agencies.index');
     Route::get('/agencies/create', [UserGovermentController::class, 'create'])->name('agencies.create');

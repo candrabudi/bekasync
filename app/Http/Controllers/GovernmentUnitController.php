@@ -41,4 +41,32 @@ class GovernmentUnitController extends Controller
 
         return response()->json($units);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:government_units,name',
+            'long_name' => 'required|unique:government_units,long_name',
+        ]);
+
+        $unit = GovernmentUnit::create($request->only('name', 'long_name'));
+        return response()->json($unit);
+    }
+
+    public function update(Request $request, GovernmentUnit $governmentUnit)
+    {
+        $request->validate([
+            'name' => 'required|unique:government_units,name,' . $governmentUnit->id,
+            'long_name' => 'required|unique:government_units,long_name,' . $governmentUnit->id,
+        ]);
+
+        $governmentUnit->update($request->only('name', 'long_name'));
+        return response()->json($governmentUnit);
+    }
+
+    public function destroy(GovernmentUnit $governmentUnit)
+    {
+        $governmentUnit->delete();
+        return response()->json(['success' => true]);
+    }
 }

@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('government_units', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('long_name')->unique();
             $table->timestamps();
         });
     }

@@ -218,7 +218,7 @@ class IncidentController extends Controller
         }
 
         if ($user->role === 'agency') {
-            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'ir.id')
+            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'incident_reports.id')
                 ->where('ar.dinas', $user->detail->governmentUnit->name);
         }
 
@@ -291,7 +291,7 @@ class IncidentController extends Controller
         }
 
         if ($user->role === 'agency') {
-            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'ir.id')
+            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'incident_reports.id')
                 ->where('ar.dinas', $user->detail->governmentUnit->name);
         }
 
@@ -365,7 +365,7 @@ class IncidentController extends Controller
         }
 
         if ($user->role === 'agency') {
-            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'ir.id')
+            $query->join('agency_responses as ar', 'ar.incident_report_id', '=', 'incident_reports.id')
                 ->where('ar.dinas', $user->detail->governmentUnit->name);
         }
 
