@@ -874,8 +874,10 @@
                 document.getElementById('avg-reply-time').innerText = data.avg_reply_time || '00:00:00';
                 document.getElementById('avg-duration-time').innerText = data.avg_duration_time || '00:00:00';
 
-                const csatValue = typeof data.avg_csat === 'number' && !isNaN(data.avg_csat) ? data.avg_csat.toFixed(
-                    2) : '0.00';
+                const avgCsat = parseFloat(data.avg_csat);
+                const csatValue = !isNaN(avgCsat) ? avgCsat.toFixed(2) : '0.00';
+                console.log("hallo: " + csatValue);
+
                 document.getElementById('avg-csat').innerText = csatValue;
                 document.querySelector('.satisfaction-note').innerText = data.avg_csat_note || '(belum ada data)';
 

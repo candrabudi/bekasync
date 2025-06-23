@@ -29,4 +29,5 @@
 <div class="settings-menu">
     <a href="{{ route('government_units.index') }}">Data OPD</a>
     <a href="{{ route('agencies.index') }}">User OPD</a>
+    <a href="{{ route('users.index') }}">Users</a>
 </div>

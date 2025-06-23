@@ -8,6 +8,7 @@ use App\Http\Controllers\DispatcherController;
 use App\Http\Controllers\GovernmentUnitController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\IncidentSyncController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserGovermentController;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/conversation-summary', 'getConversationSummary');
         Route::post('/top-tags', 'getTopTags');
         Route::post('/wa-usage', 'getWaUsage');
+    });
+
+    Route::prefix('users')->name('users.')->controller(UserController::class)->group(function () {
+        Route::get('/', 'index')->name('index');                    // List pengguna
+        Route::get('create', 'create')->name('create');            // Form tambah pengguna
+        Route::post('store', 'store')->name('store');              // Simpan pengguna baru
+        Route::get('{id}/edit', 'edit')->name('edit');             // Form edit pengguna
+        Route::post('{id}/update', 'update')->name('update');      // Simpan perubahan pengguna
+        Route::post('{id}/delete', 'destroy')->name('destroy');    // Hapus pengguna
     });
 });
 
