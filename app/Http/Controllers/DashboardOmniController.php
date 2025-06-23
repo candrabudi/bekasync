@@ -17,8 +17,8 @@ class DashboardOmniController extends Controller
     public function getActiveAgents(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-active-agents", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
@@ -27,8 +27,8 @@ class DashboardOmniController extends Controller
     public function getSubscription(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-subscription-list", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
@@ -37,8 +37,8 @@ class DashboardOmniController extends Controller
     public function getAgentPerformance(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-agent-performance", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
@@ -47,8 +47,8 @@ class DashboardOmniController extends Controller
     public function getConversationSummary(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-conversation-summary", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
@@ -57,8 +57,8 @@ class DashboardOmniController extends Controller
     public function getTopTags(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-top-tags", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
@@ -67,8 +67,8 @@ class DashboardOmniController extends Controller
     public function getWaUsage(Request $request)
     {
         $response = Http::post("{$this->baseUrl}/get-wa-usage", [
-            'channel' => 'all',
-            'date' => ['2025-06-21', '2025-06-21'],
+            'channel' => $request->channel,
+            'date' => $request->date,
         ]);
 
         return $response->json();
