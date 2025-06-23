@@ -870,9 +870,6 @@
                 document.getElementById('active-value').innerText = data.conversations_status.active || '0';
                 document.getElementById('completed-value').innerText = data.conversations_status.completed || '0';
 
-                document.getElementById('avg-1st-reply-time').innerText = data.avg_1st_reply_time || '00:00:00';
-                document.getElementById('avg-reply-time').innerText = data.avg_reply_time || '00:00:00';
-                document.getElementById('avg-duration-time').innerText = data.avg_duration_time || '00:00:00';
 
                 const avgCsat = parseFloat(data.avg_csat);
                 const csatValue = !isNaN(avgCsat) ? avgCsat.toFixed(2) : '0.00';
@@ -1194,6 +1191,10 @@
                     date: [startDate, endDate]
                 });
                 const users = response.data.data.users;
+
+                document.getElementById('avg-1st-reply-time').innerText = response.data.data.average_first_time_reply || '00:00:00';
+                document.getElementById('avg-reply-time').innerText = response.data.data.average_reply_time || '00:00:00';
+                document.getElementById('avg-duration-time').innerText = response.data.data.average_duration_conversation || '00:00:00';
 
                 let agentCardsHtml = '';
                 if (users.length === 0) {
