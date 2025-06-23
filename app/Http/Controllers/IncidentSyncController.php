@@ -31,7 +31,6 @@ class IncidentSyncController extends Controller
 
         $accessToken = $loginResponse['content']['access_token'];
 
-        // Ambil hanya data kemarin dan hari ini
         $startDate = Carbon::yesterday()->startOfDay();
         $endDate = Carbon::today()->endOfDay();
         $currentDate = $startDate;
@@ -149,8 +148,4 @@ class IncidentSyncController extends Controller
             return now()->setTimezone('UTC')->format('Y-m-d H:i:s');
         }
     }
-
-
-
-
 }

@@ -661,11 +661,13 @@
                 const totalPerCategory = Number(item.total);
 
                 tr.innerHTML = `
-            <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.category}">${truncateText(item.category)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalPerCategory}">${totalPerCategory}</td>
-            <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
-            <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
-        `;
+                    <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.category}">
+                        <a href="/incident/by-category/${item.category}" target="_blank"> ${truncateText(item.category, 30)} </a>    
+                    </td>
+                    <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalPerCategory}">${totalPerCategory}</td>
+                    <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
+                    <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
+                `;
                 list.appendChild(tr);
             });
         }
@@ -684,11 +686,15 @@
                 const totalItem = Number(item.total);
 
                 tr.innerHTML = `
-            <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.district}">${truncateText(item.district)}</td>
-            <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalItem}">${totalItem}</td>
-            <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
-            <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
-        `;
+                    <td class="py-2 pr-4 max-w-[180px] truncate" title="${item.district}">
+                        <a href="/incident/by-district/${item.district}" target="_blank">
+                            ${truncateText(item.district)}
+                        </a>
+                    </td>
+                    <td class="py-2 pr-4 text-center font-semibold text-gray-800" title="Total: ${totalItem}">${totalItem}</td>
+                    <td class="py-2 pr-4 text-center text-green-600 font-medium">${item.selesai_count}</td>
+                    <td class="py-2 text-center text-yellow-500 font-medium">${item.proses_count}</td>
+                `;
                 list.appendChild(tr);
             });
         }

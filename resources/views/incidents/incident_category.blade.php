@@ -2,34 +2,21 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mb-4">Daftar Insiden berdasarkan Dinas {{ $agency }}</h2>
+        <h2 class="mb-4">Daftar Insiden berdasarkan Kategori {{ ucwords($category) }}</h2>
 
         <div class="card mb-4 shadow-sm">
             <div class="card-body">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-4 col-lg-3">
-                        <label for="search" class="form-label visually-hidden">Cari Tiket/Penelepon/Telepon</label>
                         <input type="text" id="search" class="form-control" placeholder="Cari tiket/penelepon/telepon">
                     </div>
                     <div class="col-md-4 col-lg-2">
-                        <label for="start_date" class="form-label visually-hidden">Tanggal Mulai</label>
                         <input type="text" id="start_date" class="form-control" placeholder="Tanggal mulai">
                     </div>
                     <div class="col-md-4 col-lg-2">
-                        <label for="end_date" class="form-label visually-hidden">Tanggal Berakhir</label>
                         <input type="text" id="end_date" class="form-control" placeholder="Tanggal berakhir">
                     </div>
                     <div class="col-md-4 col-lg-2">
-                        <label for="category" class="form-label visually-hidden">Kategori</label>
-                        <select id="category" class="form-select">
-                            <option value="">Semua Kategori</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category }}">{{ $category }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4 col-lg-2">
-                        <label for="status" class="form-label visually-hidden">Status</label>
                         <select id="status" class="form-select">
                             <option value="">Semua Status</option>
                             <option value="1">Open</option>
@@ -39,7 +26,6 @@
                         </select>
                     </div>
                     <div class="col-md-4 col-lg-2">
-                        <label for="district" class="form-label visually-hidden">Kecamatan</label>
                         <select id="district" class="form-select">
                             <option value="">Semua Kecamatan</option>
                             @foreach ($districts as $district)
@@ -48,7 +34,6 @@
                         </select>
                     </div>
                     <div class="col-md-4 col-lg-2">
-                        <label for="subdistrict" class="form-label visually-hidden">Kelurahan</label>
                         <select id="subdistrict" class="form-select">
                             <option value="">Semua Kelurahan</option>
                             @foreach ($subdistricts as $subdistrict)
@@ -56,7 +41,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="col-12 col-md-4 col-lg-3 mt-2">
                         <div class="d-grid gap-2 d-md-flex">
                             <button class="btn btn-primary flex-fill" onclick="fetchData()">Filter</button>
@@ -87,11 +71,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <script>
+        const today = new Date().toISOString().split('T')[0];
+
         flatpickr("#start_date", {
-            dateFormat: "Y-m-d"
+            dateFormat: "Y-m-d",
+            defaultDate: today
         });
+
         flatpickr("#end_date", {
-            dateFormat: "Y-m-d"
+            dateFormat: "Y-m-d",
+            defaultDate: today
         });
 
         let currentPage = 1;
@@ -105,7 +94,6 @@
                 search: getEl('search').value,
                 start_date: getEl('start_date').value,
                 end_date: getEl('end_date').value,
-                category: getEl('category').value,
                 status: getEl('status').value,
                 district: getEl('district').value,
                 subdistrict: getEl('subdistrict').value,
@@ -114,9 +102,7 @@
             getEl('loading').style.display = 'block';
             getEl('incidentCards').innerHTML = '';
 
-            axios.get(`/incident/by-dinas/${dinasParam}/list`, {
-                    params
-                })
+            axios.get(`/incident/by-category/${dinasParam}/list`, { params })
                 .then(response => {
                     const data = response.data;
                     const cards = data.data.length > 0 ?
@@ -140,13 +126,13 @@
                         </div>
                     `).join('') :
                         `<div class="col-12 text-center py-4">
-                        <p class="lead text-muted">Tidak ada insiden yang ditemukan.</p>
-                    </div>`;
+                            <p class="lead text-muted">Tidak ada insiden yang ditemukan.</p>
+                        </div>`;
 
                     getEl('incidentCards').innerHTML = cards;
                     renderPagination(data);
                 })
-                .catch(error => {
+                .catch(() => {
                     getEl('incidentCards').innerHTML = `
                     <div class="col-12 text-danger text-center py-4">
                         <p class="lead">Terjadi kesalahan saat memuat data. Silakan coba lagi.</p>
@@ -158,19 +144,21 @@
         }
 
         function resetFilter() {
-            ['search', 'start_date', 'end_date', 'category', 'status', 'district', 'subdistrict'].forEach(id => {
-                getEl(id).value = '';
+            ['search', 'start_date', 'end_date', 'status', 'district', 'subdistrict'].forEach(id => {
+                const el = getEl(id);
+                if (el) el.value = '';
             });
+
+            getEl('start_date').value = today;
+            getEl('end_date').value = today;
             fetchData(1);
         }
 
         function renderPagination(data) {
             const pagination = getEl('pagination');
             pagination.innerHTML = '';
-            const {
-                last_page: totalPages,
-                current_page: currentPage
-            } = data;
+            const totalPages = data.last_page;
+            const current = data.current_page;
             const maxPagesToShow = 5;
 
             let startPage, endPage;
@@ -178,53 +166,36 @@
                 startPage = 1;
                 endPage = totalPages;
             } else {
-                if (currentPage <= Math.ceil(maxPagesToShow / 2)) {
+                if (current <= Math.ceil(maxPagesToShow / 2)) {
                     startPage = 1;
                     endPage = maxPagesToShow;
-                } else if (currentPage + Math.floor(maxPagesToShow / 2) >= totalPages) {
+                } else if (current + Math.floor(maxPagesToShow / 2) >= totalPages) {
                     startPage = totalPages - maxPagesToShow + 1;
                     endPage = totalPages;
                 } else {
-                    startPage = currentPage - Math.floor(maxPagesToShow / 2);
-                    endPage = currentPage + Math.ceil(maxPagesToShow / 2) - 1;
+                    startPage = current - Math.floor(maxPagesToShow / 2);
+                    endPage = current + Math.ceil(maxPagesToShow / 2) - 1;
                 }
             }
 
-            if (currentPage > 1) {
-                pagination.innerHTML +=
-                    `<li class="page-item"><button class="page-link" onclick="fetchData(${currentPage - 1})" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>`;
+            if (current > 1) {
+                pagination.innerHTML += `<li class="page-item"><button class="page-link" onclick="fetchData(${current - 1})" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>`;
             }
 
             for (let i = startPage; i <= endPage; i++) {
-                pagination.innerHTML += `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <button class="page-link" onclick="fetchData(${i})">${i}</button>
-                </li>`;
+                pagination.innerHTML += `<li class="page-item ${i === current ? 'active' : ''}"><button class="page-link" onclick="fetchData(${i})">${i}</button></li>`;
             }
 
-            if (currentPage < totalPages) {
-                pagination.innerHTML +=
-                    `<li class="page-item"><button class="page-link" onclick="fetchData(${currentPage + 1})" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>`;
+            if (current < totalPages) {
+                pagination.innerHTML += `<li class="page-item"><button class="page-link" onclick="fetchData(${current + 1})" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>`;
             }
         }
 
         const statusMap = {
-            1: {
-                label: 'Open',
-                color: 'primary'
-            },
-            2: {
-                label: 'In Progress',
-                color: 'warning'
-            },
-            3: {
-                label: 'Closed',
-                color: 'success'
-            },
-            4: {
-                label: 'Pending',
-                color: 'secondary'
-            },
+            1: { label: 'Open', color: 'primary' },
+            2: { label: 'In Progress', color: 'warning' },
+            3: { label: 'Closed', color: 'success' },
+            4: { label: 'Pending', color: 'secondary' },
         };
 
         function getStatusLabel(status) {
@@ -236,6 +207,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            getEl('start_date').value = today;
+            getEl('end_date').value = today;
             fetchData();
         });
     </script>

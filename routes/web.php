@@ -58,6 +58,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/incident/by-dinas/{a}', [IncidentController::class, 'showByDinas']);
     Route::get('/incident/by-dinas/{a}/list', [IncidentController::class, 'getReportsByDinas']);
 
+    Route::get('/incident/by-category/{a}', [IncidentController::class, 'showByCategory']);
+    Route::get('/incident/by-category/{a}/list', [IncidentController::class, 'getReportsByCategory']);
+
+    Route::get('/incident/by-status/{a}', [IncidentController::class, 'showByStatus']);
+    Route::get('/incident/by-status/{a}/list', [IncidentController::class, 'getReportsByStatus']);
+
+    Route::get('/incident/by-district/{a}', [IncidentController::class, 'showByDistrict']);
+    Route::get('/incident/by-district/{a}/list', [IncidentController::class, 'getReportsByDistrict']);
+
     Route::get('/government-units', [GovernmentUnitController::class, 'index'])->name('government_units.index');
     Route::get('/government-units/data', [GovernmentUnitController::class, 'data'])->name('government_units.data');
 
