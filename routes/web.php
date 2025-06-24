@@ -99,6 +99,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('{id}/update', 'update')->name('update');      // Simpan perubahan pengguna
         Route::post('{id}/delete', 'destroy')->name('destroy');    // Hapus pengguna
     });
+
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::put('/profile/update', [AuthController::class, 'profileUpdate'])->name('profile.update');
 });
 
 

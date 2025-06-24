@@ -93,7 +93,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a class="dropdown-item" href="profile.html">
+                                <a class="dropdown-item" href="{{ route('profile') }}">
                                     <span><i class="fi fi-rr-user"></i></span>
                                     Profile
                                 </a>
