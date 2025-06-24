@@ -34,11 +34,11 @@ class IncidentController extends Controller
         }
 
         if ($request->start_date) {
-            $query->whereDate('incident_created_at', '>=', $request->start_date);
+            $query->whereDate('created_at', '>=', $request->start_date);
         }
 
         if ($request->end_date) {
-            $query->whereDate('incident_created_at', '<=', $request->end_date);
+            $query->whereDate('created_at', '<=', $request->end_date);
         }
 
         if ($request->category) {
@@ -63,7 +63,7 @@ class IncidentController extends Controller
         }
 
         return response()->json(
-            $query->orderBy('incident_reports.created_at', 'desc')->paginate(9)
+            $query->orderby('created_at', 'desc')->paginate(9)
         );
     }
 
