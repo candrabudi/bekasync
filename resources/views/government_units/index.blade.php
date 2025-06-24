@@ -31,12 +31,17 @@
 
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
+                        <div class="mb-3">
+                            <input type="text" id="searchInput" class="form-control"
+                                placeholder="Cari berdasarkan nama singkat atau nama lengkap..."
+                                oninput="onSearchChange()" />
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-nowrap align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Nama Singkat</th>
-                                        <th>Nama Lengkap</th>
+                                        <th>KODE OPD</th>
+                                        <th>NAMA OPD</th>
                                         <th>Total Pengguna</th>
                                         <th>Aktif</th>
                                         <th>Tidak Aktif</th>
@@ -86,6 +91,7 @@
 
     <script>
         let currentPage = 1;
+        let searchKeyword = '';
 
         function showForm(unit = null) {
             document.getElementById('side-form').classList.remove('d-none');
@@ -103,10 +109,16 @@
             document.getElementById('unit_id').value = '';
         }
 
+        function onSearchChange() {
+            searchKeyword = document.getElementById('searchInput').value;
+            fetchUnits(1); // Reset ke halaman 1 saat mencari
+        }
+
         function fetchUnits(page = 1) {
             axios.get("{{ route('government_units.data') }}", {
                     params: {
-                        page
+                        page,
+                        search: searchKeyword
                     }
                 })
                 .then(res => {

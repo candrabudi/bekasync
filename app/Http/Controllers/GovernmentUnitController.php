@@ -16,31 +16,42 @@ class GovernmentUnitController extends Controller
 
     public function data(Request $request)
     {
-        $units = GovernmentUnit::with(['userDetails.user'])
-            ->withCount(['userDetails'])
-            ->paginate(10); // limit 10 per page
+        $query = GovernmentUnit::with(['userDetails.user'])
+            ->withCount(['userDetails']);
 
-        // Tambahkan count aktif / non aktif
+        // Filter pencarian jika ada
+        if ($request->has('search') && $request->search !== '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('long_name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $units = $query->paginate(10);
+
         $units->getCollection()->transform(function ($unit) {
             $active = 0;
             $inactive = 0;
 
             foreach ($unit->userDetails as $detail) {
-                if ($detail->user && $detail->user->status === 'active')
+                if ($detail->user && $detail->user->status === 'active') {
                     $active++;
-                if ($detail->user && $detail->user->status === 'inactive')
+                }
+                if ($detail->user && $detail->user->status === 'inactive') {
                     $inactive++;
+                }
             }
 
             $unit->active_users = $active;
             $unit->inactive_users = $inactive;
 
-            unset($unit->userDetails); // optional supaya response tidak terlalu besar
+            unset($unit->userDetails); // optional
             return $unit;
         });
 
         return response()->json($units);
     }
+
 
     public function store(Request $request)
     {
