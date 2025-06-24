@@ -63,7 +63,7 @@ class IncidentController extends Controller
         }
 
         return response()->json(
-            $query->orderByDesc('incident_created_at')->paginate(9)
+            $query->orderBy('incident_reports.created_at', 'desc')->paginate(9)
         );
     }
 
