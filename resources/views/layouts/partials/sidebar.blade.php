@@ -19,14 +19,14 @@
                      <span class="nav-text">112</span>
                  </a>
              </li>
-             @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'mayor')
+             {{-- @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'mayor')
                  <li>
                      <a href="/omni-channel">
                          <span><i class="fi fi-rr-comment-alt-dots"></i></span>
                          <span class="nav-text">Omni</span>
                      </a>
                  </li>
-             @endif
+             @endif --}}
              @if (Auth::user()->role == 'superadmin')
                  <li>
                      <a href="{{ route('government_units.index') }}">
