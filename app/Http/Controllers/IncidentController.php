@@ -8,9 +8,46 @@ use App\Models\AgencyResponse;
 use App\Models\IncidentLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class IncidentController extends Controller
 {
+    public function dashboard()
+    {
+        return view('incidents.dashboard');
+    }
+
+    public function getDashboard(Request $request)
+    {
+        $start = $request->start ? Carbon::parse($request->start) : Carbon::now()->subMonth();
+        $end = $request->end ? Carbon::parse($request->end) : Carbon::now();
+
+        $data = [];
+
+        $data['summary'] = [
+            'total' => IncidentReport::whereBetween('created_at', [$start, $end])->count(),
+            'today' => IncidentReport::whereDate('created_at', Carbon::today())->count(),
+        ];
+
+        $data['by_category'] = IncidentReport::whereBetween('created_at', [$start, $end])
+            ->select('category', DB::raw('COUNT(*) as total'))
+            ->groupBy('category')->get();
+
+        $data['by_dinas'] = AgencyResponse::whereBetween('created_at', [$start, $end])
+            ->select('dinas', DB::raw('COUNT(*) as total'))
+            ->groupBy('dinas')->get();
+
+        $data['trend'] = IncidentReport::whereBetween('created_at', [$start, $end])
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as total'))
+            ->groupBy('date')->get();
+
+        $data['by_location'] = IncidentReport::whereBetween('created_at', [$start, $end])
+            ->select('subdistrict', DB::raw('COUNT(*) as total'))
+            ->groupBy('subdistrict')->get();
+
+        return response()->json($data);
+    }
+
     public function index(Request $request)
     {
         return view('incidents.index', [

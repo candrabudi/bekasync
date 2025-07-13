@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/incidents', [IncidentController::class, 'index'])->name('incidents.index');
+    Route::get('/incidents/dashboard', [IncidentController::class, 'dashboard'])->name('incidents.dashboard');
+    Route::get('/incidents/dashboard/data', [IncidentController::class, 'getDashboard'])->name('incidents.getDashboard');
     Route::get('/incidents/data', [IncidentController::class, 'fetch'])->name('incidents.fetch');
     Route::get('/incidents/{id}', [IncidentController::class, 'show'])->name('incidents.show');
     Route::get('/incident/by-dinas/{a}', [IncidentController::class, 'showByDinas']);
