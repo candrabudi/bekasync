@@ -12,6 +12,7 @@ class CdrReportSyncController extends Controller
     public function sync()
     {
         set_time_limit(1000);
+
         $loginResponse = Http::withHeaders([
             'accept' => 'application/json',
             'X-CSRF-TOKEN' => ''
@@ -25,8 +26,10 @@ class CdrReportSyncController extends Controller
         }
 
         $token = $loginResponse['content']['access_token'];
-        $startDate = Carbon::yesterday(); // Kemarin
-        $endDate = Carbon::today();       // Hari ini
+
+        // Ambil data dari 4 bulan ke belakang sampai hari ini
+        $startDate = Carbon::now()->subMonths(1)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
 
         $url = 'https://kotabekasiv2.sakti112.id/api/v3/layer1/laporan-cdr';
         $totalImported = 0;
@@ -72,7 +75,7 @@ class CdrReportSyncController extends Controller
                 logger("Error on $formattedDate: " . $e->getMessage());
             }
 
-            $startDate->addDay();
+            $startDate->addDay(); // Lanjut ke tanggal berikutnya
         }
 
         return response()->json([
@@ -80,5 +83,4 @@ class CdrReportSyncController extends Controller
             'total_imported' => $totalImported,
         ]);
     }
-
 }

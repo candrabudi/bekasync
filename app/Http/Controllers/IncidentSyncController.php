@@ -31,8 +31,9 @@ class IncidentSyncController extends Controller
 
         $accessToken = $loginResponse['content']['access_token'];
 
-        $startDate = Carbon::yesterday()->startOfDay();
-        $endDate = Carbon::today()->endOfDay();
+        // Ambil data dari 4 bulan ke belakang sampai hari ini
+        $startDate = Carbon::now()->subMonths(1)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
         $currentDate = $startDate;
         $totalSynced = 0;
 
@@ -137,6 +138,7 @@ class IncidentSyncController extends Controller
 
         return response()->json(['message' => 'Sync completed', 'total_synced' => $totalSynced]);
     }
+
 
     private function normalizeDatetime($value)
     {
